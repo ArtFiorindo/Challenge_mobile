@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import { View, TextInput, Button, Text, TouchableOpacity, Alert, StyleSheet, Image, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+
+// Importe a imagem
+import Logo from '../../assets/OnData.jpeg';  // ajuste o caminho da imagem
 
 const RegisterScreen: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [role, setRole] = useState('');
   const [cnpj, setCnpj] = useState('');
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
 
   const handleRegister = async () => {
-    if (!username || !password || !confirmPassword || !role || !cnpj || !email) {
+    if (!username || !password || !confirmPassword || !cnpj || !email) {
       Alert.alert('Erro', 'Todos os campos são obrigatórios.');
       return;
     }
@@ -34,7 +36,6 @@ const RegisterScreen: React.FC = () => {
         body: JSON.stringify({
           username,
           password,
-          role,
           cnpj,
           email,
         }),
@@ -59,7 +60,10 @@ const RegisterScreen: React.FC = () => {
   };
 
   return (
-    <View style={{ padding: 20 }}>
+    <ScrollView contentContainerStyle={styles.container}>
+      {/* Exibe a imagem do logo */}
+      <Image source={Logo} style={styles.logo} />
+
       <TextInput
         placeholder="Username"
         value={username}
@@ -81,53 +85,72 @@ const RegisterScreen: React.FC = () => {
         style={styles.input}
       />
       <TextInput
-        placeholder="Password"
+        placeholder="Senha"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
         style={styles.input}
       />
       <TextInput
-        placeholder="Confirm Password"
+        placeholder="Confirmar Senha"
         value={confirmPassword}
         onChangeText={setConfirmPassword}
         secureTextEntry
         style={styles.input}
       />
-      <TextInput
-        placeholder="Role"
-        value={role}
-        onChangeText={setRole}
-        style={styles.input}
-      />
+
       <TouchableOpacity style={styles.button} onPress={handleRegister} disabled={loading}>
         <Text style={styles.buttonText}>Cadastrar</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={handleNavigateToLogin} style={{ marginTop: 20 }}>
-        <Text style={{ color: 'blue', textAlign: 'center' }}>Já tem uma conta? Faça login</Text>
+        <Text style={styles.loginLink}>Já tem uma conta? Faça login</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    justifyContent: 'flex-start',  // Garante que o conteúdo fique "mais acima"
+    padding: 20,
+    backgroundColor: '#fff',
+    paddingTop: 50,  // Adiciona espaço extra no topo
+  },
+  // Estilo para a imagem do logo
+  logo: {
+    width: 150,  // Ajuste o tamanho da imagem
+    height: 150,
+    resizeMode: 'contain',
+    alignSelf: 'center',  // Centraliza a imagem
+    marginBottom: 20,
+  },
   input: {
     marginBottom: 10,
     borderWidth: 1,
+    borderColor: '#d3d3d3',
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 10,
+    backgroundColor: '#f0f0f0',
   },
   button: {
     backgroundColor: '#8C82FC',
-    padding: 10,
-    borderRadius: 5,
+    padding: 15,
+    borderRadius: 10,
     alignItems: 'center',
+    marginTop: 10,
   },
   buttonText: {
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  loginLink: {
+    color: 'blue',
+    textAlign: 'center',
+    marginTop: 20,
+    fontSize: 14,
   },
 });
 
