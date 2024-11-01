@@ -1,6 +1,6 @@
 const sqlite3 = require('sqlite3').verbose();
 
-const db = new sqlite3.Database(':memory:', (err) => {
+const db = new sqlite3.Database('./lista-tarefas.db', (err) => {
   if (err) {
     console.error('Erro ao abrir o banco de dados: ' + err.message);
   } else {
@@ -8,7 +8,7 @@ const db = new sqlite3.Database(':memory:', (err) => {
   }
 });
 
-// Criação da tabela se não existir
+// Criação das tabelas se não existirem
 db.serialize(() => {
   db.run(`
     CREATE TABLE IF NOT EXISTS usuarios (
@@ -16,6 +16,17 @@ db.serialize(() => {
       username TEXT NOT NULL UNIQUE,
       password TEXT NOT NULL,
       role TEXT NOT NULL
+    )
+  `);
+
+  db.run(`
+    CREATE TABLE IF NOT EXISTS pacientes (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      nome TEXT NOT NULL,
+      cpf TEXT NOT NULL UNIQUE,
+      dataNascimento TEXT NOT NULL,
+      sinistro TEXT NOT NULL,
+      descricao TEXT
     )
   `);
 });

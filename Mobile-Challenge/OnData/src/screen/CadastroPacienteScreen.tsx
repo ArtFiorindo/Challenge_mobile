@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, FlatList, TouchableOpacity, Modal, StyleSheet, Platform } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, FlatList, TouchableOpacity, Modal, StyleSheet, Platform, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Layout from '../components/Layout';
-import DatePicker from 'react-native-datepicker'; // Supondo que você esteja usando este pacote
+import DatePicker from 'react-native-datepicker';
 
 interface Paciente {
   id: number;
@@ -20,42 +20,62 @@ const CadastroPacienteScreen: React.FC = () => {
   const [sinistro, setSinistro] = useState('');
   const [descricao, setDescricao] = useState('');
   const [pacientes, setPacientes] = useState<Paciente[]>([]);
-  const [modalVisible, setModalVisible] = useState(false); // Estado para o modal
+  const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
 
-  const adicionarPaciente = () => {
-    if (nome.trim() === '' || cpf.trim() === '' || dataNascimento.trim() === '' || sinistro.trim() === '' || descricao.trim() === '') {
-      setModalVisible(true); // Mostra o modal se houver campos vazios
+  const API_URL = 'http://localhost:3000/api/pacientes';
+
+  useEffect(() => {
+    carregarPacientes();
+  }, []);
+
+  // Carrega todos os pacientes do backend
+  const carregarPacientes = async () => {
+    try {
+      const response = await fetch(API_URL, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      if (!response.ok) throw new Error('Erro ao carregar pacientes');
+      const data = await response.json();
+      setPacientes(data);
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Erro', 'Não foi possível carregar os pacientes.');
+    }
+  };
+
+  // Adiciona um novo paciente no backend
+  const adicionarPaciente = async () => {
+    if (!nome || !cpf || !dataNascimento || !sinistro || !descricao) {
+      setModalVisible(true);
       return;
     }
+    const novoPaciente = { nome, cpf, dataNascimento, sinistro, descricao };
 
-    const novoPaciente: Paciente = {
-      id: pacientes.length + 1,
-      nome,
-      cpf,
-      dataNascimento,
-      sinistro,
-      descricao,
-    };
-    setPacientes([...pacientes, novoPaciente]);
-    setNome('');
-    setCpf('');
-    setDataNascimento('');
-    setSinistro('');
-    setDescricao('');
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(novoPaciente),
+      });
+
+      if (!response.ok) throw new Error('Erro ao adicionar paciente');
+      const pacienteCriado = await response.json();
+      setPacientes([...pacientes, pacienteCriado]);
+      setNome('');
+      setCpf('');
+      setDataNascimento('');
+      setSinistro('');
+      setDescricao('');
+      Alert.alert('Sucesso', 'Paciente cadastrado com sucesso!');
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Erro', 'Não foi possível adicionar o paciente.');
+    }
   };
 
-  const formatarDataNascimento = (value: string) => {
-    const apenasNumeros = value.replace(/\D/g, '');
-    const formato = apenasNumeros.replace(/(\d{2})(\d)/, '$1/$2').replace(/(\d{2})\/(\d{2})(\d)/, '$1/$2/$3');
-    return formato;
-  };
-
-  const handleChangeDataNascimento = (value: string) => {
-    const formattedValue = formatarDataNascimento(value);
-    setDataNascimento(formattedValue);
-  };
-
+  // Navega para a tela de detalhes do paciente
   const abrirFichaPaciente = (paciente: Paciente) => {
     navigation.navigate('DetalhesPacienteScreen', { paciente });
   };
@@ -66,24 +86,14 @@ const CadastroPacienteScreen: React.FC = () => {
         <Text style={styles.title}>Cadastro de Paciente</Text>
 
         <View style={styles.formContainer}>
-          <TextInput
-            placeholder="Nome Completo"
-            value={nome}
-            onChangeText={setNome}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="CPF"
-            value={cpf}
-            onChangeText={setCpf}
-            style={styles.input}
-          />
+          <TextInput placeholder="Nome Completo" value={nome} onChangeText={setNome} style={styles.input} />
+          <TextInput placeholder="CPF" value={cpf} onChangeText={setCpf} style={styles.input} />
 
           {Platform.OS === 'web' ? (
             <TextInput
               placeholder="Data de Nascimento (DD/MM/AAAA)"
               value={dataNascimento}
-              onChangeText={handleChangeDataNascimento}
+              onChangeText={setDataNascimento}
               style={styles.input}
             />
           ) : (
@@ -95,25 +105,15 @@ const CadastroPacienteScreen: React.FC = () => {
               format="DD/MM/YYYY"
               confirmBtnText="Confirmar"
               cancelBtnText="Cancelar"
-              onDateChange={(date: string) => setDataNascimento(date)}
+              onDateChange={setDataNascimento}
               customStyles={{
                 dateInput: { borderWidth: 1, padding: 8, alignItems: 'flex-start', borderRadius: 5 },
               }}
             />
           )}
 
-          <TextInput
-            placeholder="Sinistro"
-            value={sinistro}
-            onChangeText={setSinistro}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Descrição Geral"
-            value={descricao}
-            onChangeText={setDescricao}
-            style={styles.input}
-          />
+          <TextInput placeholder="Sinistro" value={sinistro} onChangeText={setSinistro} style={styles.input} />
+          <TextInput placeholder="Descrição Geral" value={descricao} onChangeText={setDescricao} style={styles.input} />
 
           <TouchableOpacity onPress={adicionarPaciente} style={styles.button}>
             <Text style={styles.buttonText}>Adicionar Paciente</Text>
