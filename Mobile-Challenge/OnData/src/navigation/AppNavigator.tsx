@@ -8,20 +8,44 @@ import CadastroPacienteScreen from '../screen/CadastroPacienteScreen';
 import DetalhesPacienteScreen from '../screen/DetalhesPacienteScreen';
 import ConfiguracaoScreen from '../screen/ConfiguracaoScreen';
 
-
 const Stack = createStackNavigator<RootStackParamList>();
 
 const AppNavigator: React.FC = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="LoginScreen">
-        <Stack.Screen name="LoginScreen" component={LoginScreen} />
-        <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
-        <Stack.Screen name="CadastroPacienteScreen" component={CadastroPacienteScreen} />
-        <Stack.Screen name="ConfiguracaoScreen" component={ConfiguracaoScreen} />
-        <Stack.Screen name="DetalhesPacienteScreen" component={DetalhesPacienteScreen} />
-       
-       
+        
+        <Stack.Screen 
+          name="LoginScreen" 
+          component={LoginScreen} 
+          options={{ headerShown: false }} 
+        />
+        
+        <Stack.Screen 
+          name="RegisterScreen" 
+          component={RegisterScreen} 
+          options={{ title: 'Cadastro' }} 
+        />
+
+        <Stack.Screen 
+          name="CadastroPacienteScreen" 
+          component={CadastroPacienteScreen} 
+          options={{ title: 'Cadastro de Pacientes' }} 
+        />
+
+        <Stack.Screen 
+          name="ConfiguracaoScreen" 
+          component={ConfiguracaoScreen} 
+          options={{ title: 'Configurações' }} 
+        />
+
+        <Stack.Screen 
+          name="DetalhesPacienteScreen" 
+          component={DetalhesPacienteScreen} 
+          options={{ title: 'Detalhes do Paciente' }} 
+        />
+
+
       </Stack.Navigator>
     </NavigationContainer>
   );

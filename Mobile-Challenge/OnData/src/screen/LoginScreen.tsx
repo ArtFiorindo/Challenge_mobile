@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, TextInput, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, TextInput, Text, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/types';
 import AsyncStorage from '@react-native-community/async-storage';
+import { FontAwesome } from '@expo/vector-icons';
 
 const LoginScreen: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -10,9 +11,11 @@ const LoginScreen: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
+  const API_URL = 'http://localhost:3000/api/login';
+
   const handleLogin = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/login', {
+      const response = await fetch(API_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -29,11 +32,12 @@ const LoginScreen: React.FC = () => {
       }
 
       const { token } = await response.json();
-      await AsyncStorage.setItem('token', token);
+      await AsyncStorage.setItem('token', token); // Armazena o token no AsyncStorage
       setError(null);
       navigation.replace('CadastroPacienteScreen');
     } catch (error) {
       setError('Erro de autenticação. Verifique suas credenciais.');
+      Alert.alert('Erro', 'Não foi possível fazer login. Verifique as credenciais e tente novamente.');
     }
   };
 
@@ -43,12 +47,19 @@ const LoginScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      {/* Título e logo */}
-      <Text style={styles.welcomeText}>Bem-Vindo</Text>
+      {/* Círculos de fundo */}
+      <View style={styles.circleTop} />
+      <View style={styles.circleBottom} />
+
+      {/* Parte superior com fundo roxo e título */}
+      <View style={styles.header}>
+        <Text style={styles.welcomeText}>Bem-Vindo</Text>
+      </View>
+
+      {/* Logo centralizado */}
       <Image 
-        source={require('../../assets/OnData.jpeg')} 
+        source={require('../../assets/OnDataLogo.png')} 
         style={styles.logo}
-        resizeMode="contain" 
       />
 
       {/* Campos de login */}
@@ -57,6 +68,7 @@ const LoginScreen: React.FC = () => {
         value={username}
         onChangeText={setUsername}
         style={styles.input}
+        placeholderTextColor="#5c5c5c"
       />
       <TextInput
         placeholder="Senha"
@@ -64,6 +76,7 @@ const LoginScreen: React.FC = () => {
         onChangeText={setPassword}
         secureTextEntry
         style={styles.input}
+        placeholderTextColor="#5c5c5c"
       />
 
       {/* Botão de login */}
@@ -71,13 +84,26 @@ const LoginScreen: React.FC = () => {
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
 
-      {/* Mensagem de erro */}
-      {error && <Text style={styles.errorText}>{error}</Text>}
+      <Text style={styles.orText}>ou</Text>
+
+      {/* Botões de login com Google e Apple */}
+      <TouchableOpacity style={styles.socialButtonGoogle}>
+        <FontAwesome name="google" size={20} color="#000" />
+        <Text style={styles.socialButtonText}>Conecte com o Google</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.socialButtonApple}>
+        <FontAwesome name="apple" size={20} color="#000" />
+        <Text style={styles.socialButtonText}>Conecte com a Apple</Text>
+      </TouchableOpacity>
 
       {/* Link de cadastro */}
       <TouchableOpacity onPress={handleNavigateToRegister} style={styles.registerLink}>
         <Text style={styles.registerText}>Não tem uma conta? Cadastre-se</Text>
       </TouchableOpacity>
+
+      {/* Mensagem de erro */}
+      {error && <Text style={styles.errorText}>{error}</Text>}
     </View>
   );
 };
@@ -85,34 +111,57 @@ const LoginScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start', // Altera a justificativa para iniciar no topo
-    padding: 20,
     backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+    overflow: 'hidden',
+  },
+  circleTop: {
+    width: 425,
+    height: 425,
+    backgroundColor: '#5c50b8',
+    borderRadius: 200,
+    position: 'absolute',
+    top: -200,
+    right: -100,
+  },
+  circleBottom: {
+    width: 300,
+    height: 300,
+    backgroundColor: '#5c50b8',
+    borderRadius: 150,
+    position: 'absolute',
+    bottom: -100,
+    left: -80,
   },
   welcomeText: {
     fontSize: 28,
-    textAlign: 'center',
-    color: '#8C82FC',
-    marginBottom: 10, // Reduzido para empurrar o logo para cima
+    color: '#fff',
+    fontWeight: 'bold',
   },
   logo: {
-    width: 150,
-    height: 150,
-    alignSelf: 'center',
-    marginBottom: 20, // Reduzido para aproximar do campo
+    width: 190, 
+    height: 190,
+    resizeMode: 'contain', 
+    marginBottom: 30, 
   },
   input: {
-    marginBottom: 15,
+    width: '100%',
+    height: 50,
+    borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 12,
-    borderRadius: 8,
-    backgroundColor: '#f0f0f0',
+    borderColor: '#ffffff',
+    paddingHorizontal: 15,
+    marginBottom: 15,
+    backgroundColor: '#d4d4d4',
+    color: '#000000',
   },
   button: {
-    backgroundColor: '#8C82FC',
+    width: '100%',
+    backgroundColor: '#7A6BF5',
     paddingVertical: 15,
-    borderRadius: 8,
+    borderRadius: 10,
     alignItems: 'center',
     marginTop: 10,
   },
@@ -121,18 +170,52 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
+  orText: {
+    color: '#ffffff',
+    fontSize: 14,
+    marginVertical: 10,
+  },
+  socialButtonGoogle: {
+    width: '80%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    paddingVertical: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    marginBottom: 10,
+  },
+  socialButtonApple: {
+    width: '80%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    paddingVertical: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    marginBottom: 10,
+  },
+  socialButtonText: {
+    marginLeft: 10,
+    fontSize: 16,
+    color: '#000',
+  },
+  registerLink: {
+    marginTop: 10,
+  },
+  registerText: {
+    color: 'blue',
+    fontSize: 16,
+    textAlign: 'center',
+  },
   errorText: {
     color: 'red',
     marginTop: 10,
     textAlign: 'center',
-  },
-  registerLink: {
-    marginTop: 20,
-  },
-  registerText: {
-    color: 'blue',
-    textAlign: 'center',
-    fontSize: 16,
   },
 });
 

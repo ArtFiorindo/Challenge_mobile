@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, TouchableOpacity, Alert, StyleSheet, Image, ScrollView } from 'react-native';
+import { View, TextInput, Text, TouchableOpacity, Alert, StyleSheet, Image, ScrollView, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 // Importe a imagem
-import Logo from '../../assets/OnData.jpeg';  // ajuste o caminho da imagem
+import Logo from '../../assets/OnDataLogo.png';  // ajuste o caminho da imagem
+
+const { height, width } = Dimensions.get('window'); // Obtém a altura e largura da tela
 
 const RegisterScreen: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -28,7 +30,7 @@ const RegisterScreen: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3000/api/register', {
+      const response = await fetch('http://localhost:3000/api/register', {  // Substitua pelo IP da sua máquina
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -38,6 +40,7 @@ const RegisterScreen: React.FC = () => {
           password,
           cnpj,
           email,
+          role: 'user',  // Valor fixo de `role`
         }),
       });
 
@@ -60,82 +63,104 @@ const RegisterScreen: React.FC = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {/* Exibe a imagem do logo */}
-      <Image source={Logo} style={styles.logo} />
+    <View style={styles.container}>
+      {/* Círculos de fundo */}
+      <View style={styles.topCircle} />
+      <View style={styles.bottomCircle} />
 
-      <TextInput
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="CNPJ"
-        value={cnpj}
-        onChangeText={setCnpj}
-        keyboardType="numeric"
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Senha"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Confirmar Senha"
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-        secureTextEntry
-        style={styles.input}
-      />
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.logoContainer}>
+          <Image source={Logo} style={styles.logo} />
+        </View>
 
-      <TouchableOpacity style={styles.button} onPress={handleRegister} disabled={loading}>
-        <Text style={styles.buttonText}>Cadastrar</Text>
-      </TouchableOpacity>
+        <TextInput
+          placeholder="Username"
+          value={username}
+          onChangeText={setUsername}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="CNPJ"
+          value={cnpj}
+          onChangeText={setCnpj}
+          keyboardType="numeric"
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Senha"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Confirmar Senha"
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          secureTextEntry
+          style={styles.input}
+        />
 
-      <TouchableOpacity onPress={handleNavigateToLogin} style={{ marginTop: 20 }}>
-        <Text style={styles.loginLink}>Já tem uma conta? Faça login</Text>
-      </TouchableOpacity>
-    </ScrollView>
+        <TouchableOpacity style={styles.button} onPress={handleRegister} disabled={loading}>
+          <Text style={styles.buttonText}>Cadastrar</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={handleNavigateToLogin} style={{ marginTop: 20 }}>
+          <Text style={styles.loginLink}>Já tem uma conta? Faça login</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
-    justifyContent: 'flex-start',  // Garante que o conteúdo fique "mais acima"
-    padding: 20,
+    flex: 1,
     backgroundColor: '#fff',
-    paddingTop: 50,  // Adiciona espaço extra no topo
+    position: 'relative',
+    overflow: 'hidden',
   },
-  // Estilo para a imagem do logo
-  logo: {
-    width: 150,  // Ajuste o tamanho da imagem
-    height: 150,
-    resizeMode: 'contain',
-    alignSelf: 'center',  // Centraliza a imagem
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    padding: 20,
+  },
+  logoContainer: {
+    alignItems: 'center',
     marginBottom: 20,
+  },
+  topCircle: {
+    position: 'absolute',
+    width: 300,
+    height: 300,
+    borderRadius: 150,
+    backgroundColor: '#5c50b8',
+    top: -150,
+    right: -50,
+    zIndex: -1,
+  },
+  logo: {
+    width: 180,
+    height: 180,
+    resizeMode: 'contain',
   },
   input: {
     marginBottom: 10,
     borderWidth: 1,
     borderColor: '#d3d3d3',
     padding: 10,
-    borderRadius: 10,
+    borderRadius: 5,
     backgroundColor: '#f0f0f0',
   },
   button: {
-    backgroundColor: '#8C82FC',
+    backgroundColor: '#7A6BF5',
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
@@ -151,6 +176,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
     fontSize: 14,
+  },
+  bottomCircle: {
+    position: 'absolute',
+    width: 500,
+    height: 500,
+    backgroundColor: '#5c50b8',
+    borderRadius: 250,
+    bottom: -150,
+    left: -130,
+    zIndex: -1,
   },
 });
 

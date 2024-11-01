@@ -5,7 +5,7 @@ console.log(db);
 
 // Cadastro de usuário
 exports.registerUser = (req, res) => {
-  const { username, password, role } = req.body;
+  const { username, password, role = 'user' } = req.body;
 
   // Hash da senha
   bcrypt.hash(password, 10, (err, hashedPassword) => {
