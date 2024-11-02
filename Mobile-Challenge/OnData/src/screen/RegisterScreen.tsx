@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { View, TextInput, Text, TouchableOpacity, Alert, StyleSheet, Image, ScrollView, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Logo from '../../assets/OnDataLogo.png';  
 
-// Importe a imagem
-import Logo from '../../assets/OnDataLogo.png';  // ajuste o caminho da imagem
-
-const { height, width } = Dimensions.get('window'); // Obtém a altura e largura da tela
+const { height, width } = Dimensions.get('window'); 
 
 const RegisterScreen: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -30,7 +28,7 @@ const RegisterScreen: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3000/api/register', {  // Substitua pelo IP da sua máquina
+      const response = await fetch('http://localhost:3000/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -40,7 +38,7 @@ const RegisterScreen: React.FC = () => {
           password,
           cnpj,
           email,
-          role: 'user',  // Valor fixo de `role`
+          role: 'user',  
         }),
       });
 

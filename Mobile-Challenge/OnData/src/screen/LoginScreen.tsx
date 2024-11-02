@@ -32,7 +32,7 @@ const LoginScreen: React.FC = () => {
       }
 
       const { token } = await response.json();
-      await AsyncStorage.setItem('token', token); // Armazena o token no AsyncStorage
+      await AsyncStorage.setItem('token', token); 
       setError(null);
       navigation.replace('CadastroPacienteScreen');
     } catch (error) {
@@ -51,18 +51,18 @@ const LoginScreen: React.FC = () => {
       <View style={styles.circleTop} />
       <View style={styles.circleBottom} />
 
-      {/* Parte superior com fundo roxo e título */}
+      
       <View style={styles.header}>
         <Text style={styles.welcomeText}>Bem-Vindo</Text>
       </View>
 
-      {/* Logo centralizado */}
+     
       <Image 
         source={require('../../assets/OnDataLogo.png')} 
         style={styles.logo}
       />
 
-      {/* Campos de login */}
+    
       <TextInput
         placeholder="Username"
         value={username}
@@ -79,14 +79,14 @@ const LoginScreen: React.FC = () => {
         placeholderTextColor="#5c5c5c"
       />
 
-      {/* Botão de login */}
+      
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
 
       <Text style={styles.orText}>ou</Text>
 
-      {/* Botões de login com Google e Apple */}
+  
       <TouchableOpacity style={styles.socialButtonGoogle}>
         <FontAwesome name="google" size={20} color="#000" />
         <Text style={styles.socialButtonText}>Conecte com o Google</Text>
@@ -97,12 +97,11 @@ const LoginScreen: React.FC = () => {
         <Text style={styles.socialButtonText}>Conecte com a Apple</Text>
       </TouchableOpacity>
 
-      {/* Link de cadastro */}
       <TouchableOpacity onPress={handleNavigateToRegister} style={styles.registerLink}>
         <Text style={styles.registerText}>Não tem uma conta? Cadastre-se</Text>
       </TouchableOpacity>
 
-      {/* Mensagem de erro */}
+     
       {error && <Text style={styles.errorText}>{error}</Text>}
     </View>
   );

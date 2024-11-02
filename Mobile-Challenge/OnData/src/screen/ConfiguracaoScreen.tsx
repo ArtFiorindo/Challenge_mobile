@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
-import { RootStackParamList } from '../navigation/types'; // Importe o tipo de navegação
+import { RootStackParamList } from '../navigation/types'; 
 
 const ConfiguracaoScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const [isPressed, setIsPressed] = useState(false); // Estado para simular o "hover"
+  const [isPressed, setIsPressed] = useState(false);
 
   const handleLogout = async () => {
     try {
-      await AsyncStorage.removeItem('token'); // Remove o token do AsyncStorage
+      await AsyncStorage.removeItem('token'); 
       Alert.alert('Logout realizado com sucesso');
-      navigation.navigate('LoginScreen'); // Redireciona para a tela de login
+      navigation.navigate('LoginScreen');
     } catch (error) {
       Alert.alert('Erro ao fazer logout');
     }
@@ -24,10 +24,10 @@ const ConfiguracaoScreen: React.FC = () => {
 
       <TouchableOpacity
         onPress={handleLogout}
-        onPressIn={() => setIsPressed(true)} // Muda o estado quando o botão é pressionado
-        onPressOut={() => setIsPressed(false)} // Restaura o estado quando o botão é liberado
+        onPressIn={() => setIsPressed(true)}
+        onPressOut={() => setIsPressed(false)} 
         style={{
-          backgroundColor: isPressed ? '#ff4d4d' : 'red', // Altera a cor com base no estado de "hover"
+          backgroundColor: isPressed ? '#ff4d4d' : 'red',
           padding: 10,
           borderRadius: 5,
         }}

@@ -1,104 +1,104 @@
- import React, { createContext, useContext, useState, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage'; 
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Interface que define a estrutura de uma tarefa
-interface Tarefa {
+
+interface Paciente {
   id: number;
-  titulo: string;
+  nome: string;
+  cpf: string;
+  dataNascimento: string;
+  sinistro: string;
+  descricao: string;
 }
 
-// Interface que define o contexto global de estado
 interface ContextoEstadoGlobal {
-  tarefas: Tarefa[];
-  adicionarTarefa: (titulo: string) => void;
-  editarTarefa: (id: number, novoTitulo: string) => void;
-  excluirTarefa: (id: number) => void;
+  pacientes: Paciente[];
+  adicionarPaciente: (paciente: Omit<Paciente, 'id'>) => void;
+  editarPaciente: (id: number, dadosAtualizados: Partial<Paciente>) => void;
+  excluirPaciente: (id: number) => void;
 }
 
-// Cria o contexto global de estado
+
 const ContextoEstadoGlobal = createContext<ContextoEstadoGlobal>({
-  tarefas: [],
-  adicionarTarefa: () => {},
-  editarTarefa: () => {},
-  excluirTarefa: () => {},
+  pacientes: [],
+  adicionarPaciente: () => {},
+  editarPaciente: () => {},
+  excluirPaciente: () => {},
 });
 
-// Hook para acessar o contexto global de estado
+
 export const useEstadoGlobal = () => useContext(ContextoEstadoGlobal);
 
-// Componente que fornece o contexto global de estado para seus filhos
-export const ProvedorEstadoGlobal: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [tarefas, setTarefas] = useState<Tarefa[]>([]);
 
-  // Função para adicionar uma nova tarefa
-  const adicionarTarefa = async (titulo: string) => {
-    const novaTarefa: Tarefa = {
-      id: Date.now(),
-      titulo,
-    };
+export const ProvedorEstadoGlobal: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [pacientes, setPacientes] = useState<Paciente[]>([]);
+
+
+  const adicionarPaciente = async (novoPaciente: Omit<Paciente, 'id'>) => {
+    const pacienteComId = { ...novoPaciente, id: Date.now() }; // Cria um ID único
+    const novosPacientes = [...pacientes, pacienteComId];
 
     try {
-      const novasTarefas = [...tarefas, novaTarefa];
-      setTarefas(novasTarefas);
-      await salvarTarefas(novasTarefas);
+      setPacientes(novosPacientes);
+      await salvarPacientes(novosPacientes);
     } catch (error) {
-      console.error('Erro ao adicionar tarefa:', error);
+      console.error('Erro ao adicionar paciente:', error);
     }
   };
 
-  // Função para editar o título de uma tarefa
-  const editarTarefa = async (id: number, novoTitulo: string) => {
-    const novasTarefas = tarefas.map(tarefa =>
-      tarefa.id === id ? { ...tarefa, titulo: novoTitulo } : tarefa
+
+  const editarPaciente = async (id: number, dadosAtualizados: Partial<Paciente>) => {
+    const pacientesAtualizados = pacientes.map(paciente =>
+      paciente.id === id ? { ...paciente, ...dadosAtualizados } : paciente
     );
 
     try {
-      setTarefas(novasTarefas);
-      await salvarTarefas(novasTarefas);
+      setPacientes(pacientesAtualizados);
+      await salvarPacientes(pacientesAtualizados);
     } catch (error) {
-      console.error('Erro ao editar tarefa:', error);
+      console.error('Erro ao editar paciente:', error);
     }
   };
 
-  // Função para excluir uma tarefa
-  const excluirTarefa = async (id: number) => {
-    const novasTarefas = tarefas.filter(tarefa => tarefa.id !== id);
+  
+  const excluirPaciente = async (id: number) => {
+    const pacientesFiltrados = pacientes.filter(paciente => paciente.id !== id);
 
     try {
-      setTarefas(novasTarefas);
-      await salvarTarefas(novasTarefas);
+      setPacientes(pacientesFiltrados);
+      await salvarPacientes(pacientesFiltrados);
     } catch (error) {
-      console.error('Erro ao excluir tarefa:', error);
+      console.error('Erro ao excluir paciente:', error);
     }
   };
 
-  // Carrega as tarefas do AsyncStorage na inicialização
+  
   useEffect(() => {
-    const carregarTarefas = async () => {
+    const carregarPacientes = async () => {
       try {
-        const tarefasArmazenadas = await AsyncStorage.getItem('tarefas');
-        if (tarefasArmazenadas) {
-          setTarefas(JSON.parse(tarefasArmazenadas));
+        const pacientesArmazenados = await AsyncStorage.getItem('pacientes');
+        if (pacientesArmazenados) {
+          setPacientes(JSON.parse(pacientesArmazenados));
         }
       } catch (error) {
-        console.error('Erro ao carregar tarefas:', error);
+        console.error('Erro ao carregar pacientes:', error);
       }
     };
-    carregarTarefas();
+    carregarPacientes();
   }, []);
 
-  // Função para salvar as tarefas no AsyncStorage
-  const salvarTarefas = async (tarefas: Tarefa[]) => {
+ 
+  const salvarPacientes = async (pacientes: Paciente[]) => {
     try {
-      await AsyncStorage.setItem('tarefas', JSON.stringify(tarefas));
+      await AsyncStorage.setItem('pacientes', JSON.stringify(pacientes));
     } catch (error) {
-      console.error('Erro ao salvar tarefas:', error);
+      console.error('Erro ao salvar pacientes:', error);
     }
   };
 
-  // Retorna o contexto global de estado com as funções para manipular as tarefas
+  
   return (
-    <ContextoEstadoGlobal.Provider value={{ tarefas, adicionarTarefa, editarTarefa, excluirTarefa }}>
+    <ContextoEstadoGlobal.Provider value={{ pacientes, adicionarPaciente, editarPaciente, excluirPaciente }}>
       {children}
     </ContextoEstadoGlobal.Provider>
   );
