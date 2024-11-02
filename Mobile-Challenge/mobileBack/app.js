@@ -12,4 +12,5 @@ app.use(cors());
 app.use('/api', userRoutes);
 app.use('/api', patientRoutes); 
 
+
 module.exports = app;
