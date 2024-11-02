@@ -6,6 +6,7 @@ OnData é uma aplicação móvel para cadastro de pacientes, desenvolvida em Rea
 
 ## Sumário
 
+- [Equipe](#equipe)
 - [Pré-requisitos](#pré-requisitos)
 - [Instalação](#instalação)
 - [Configuração do Backend](#configuração-do-backend)
@@ -17,6 +18,20 @@ OnData é uma aplicação móvel para cadastro de pacientes, desenvolvida em Rea
 - [Validações de Formulário](#validações-de-formulário)
 - [Screenshots](#screenshots)
 - [Tecnologias Usadas](#tecnologias-usadas)
+
+---
+
+
+## Equipe
+> Artur Lopes Fiorindo » 53481
+
+
+> Eduardo Felipe Nunes Função » 553362 
+
+
+> Jhoe Yoshio Kochi Hashimoto 553831
+
+
 
 ---
 
