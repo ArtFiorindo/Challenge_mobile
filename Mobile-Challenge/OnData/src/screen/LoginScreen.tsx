@@ -101,6 +101,8 @@ const LoginScreen: React.FC = () => {
         <Text style={styles.registerText}>Não tem uma conta? Cadastre-se</Text>
       </TouchableOpacity>
 
+
+
      
       {error && <Text style={styles.errorText}>{error}</Text>}
     </View>

@@ -7,7 +7,6 @@ console.log(db);
 exports.registerUser = (req, res) => {
   const { username, password, role = 'user' } = req.body;
 
-  // Hash da senha
   bcrypt.hash(password, 10, (err, hashedPassword) => {
     if (err) return res.status(500).json({ error: err.message });
 
@@ -28,21 +27,19 @@ exports.registerUser = (req, res) => {
 exports.loginUser = (req, res) => {
   const { username, password } = req.body;
 
-  // Busca o usuário no banco
   db.get("SELECT * FROM usuarios WHERE username = ?", [username], (err, user) => {
     if (err || !user) {
       return res.status(401).json({ error: 'Usuário ou senha inválidos' });
     }
 
-    // Compara a senha criptografada
     bcrypt.compare(password, user.password, (err, isMatch) => {
       if (!isMatch || err) {
         return res.status(401).json({ error: 'Usuário ou senha inválidos' });
       }
 
-      // Gera o token JWT
       const token = jwt.sign({ id: user.id, role: user.role }, 'secreta-chave', { expiresIn: '1h' });
       res.status(200).json({ token });
     });
   });
 };
+

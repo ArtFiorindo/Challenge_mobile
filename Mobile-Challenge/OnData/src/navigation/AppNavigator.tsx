@@ -8,6 +8,7 @@ import CadastroPacienteScreen from '../screen/CadastroPacienteScreen';
 import DetalhesPacienteScreen from '../screen/DetalhesPacienteScreen';
 import ConfiguracaoScreen from '../screen/ConfiguracaoScreen';
 
+
 const Stack = createStackNavigator<RootStackParamList>();
 
 const AppNavigator: React.FC = () => {
@@ -26,6 +27,7 @@ const AppNavigator: React.FC = () => {
           component={RegisterScreen} 
           options={{ title: 'Cadastro' }} 
         />
+
 
         <Stack.Screen 
           name="CadastroPacienteScreen" 

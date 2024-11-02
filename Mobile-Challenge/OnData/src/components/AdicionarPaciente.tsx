@@ -78,7 +78,7 @@ const AdicionarPaciente: React.FC<AdicionarPacienteProps> = ({ onAdicionarPacien
     let formattedCpf = text.replace(/\D/g, '');
     if (formattedCpf.length > 11) {
       formattedCpf = formattedCpf.slice(0, 11); 
-
+    }
     formattedCpf = formattedCpf.replace(/(\d{3})(\d)/, '$1.$2');
     formattedCpf = formattedCpf.replace(/(\d{3})(\d)/, '$1.$2');
     formattedCpf = formattedCpf.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
@@ -231,7 +231,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-
-};
 
 export default AdicionarPaciente;
