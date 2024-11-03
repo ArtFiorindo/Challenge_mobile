@@ -10,14 +10,17 @@ const db = new sqlite3.Database('./lista-tarefas.db', (err) => {
 
 // Criação das tabelas se não existirem
 db.serialize(() => {
+ 
   db.run(`
     CREATE TABLE IF NOT EXISTS usuarios (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       username TEXT NOT NULL UNIQUE,
       password TEXT NOT NULL,
-      role TEXT NOT NULL
+
+      role TEXT NOT NULL DEFAULT 'user'
     )
   `);
+
 
   db.run(`
     CREATE TABLE IF NOT EXISTS pacientes (
@@ -29,6 +32,8 @@ db.serialize(() => {
       descricao TEXT
     )
   `);
+
+  
 });
 
 module.exports = db;

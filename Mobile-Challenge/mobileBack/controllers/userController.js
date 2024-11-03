@@ -42,4 +42,3 @@ exports.loginUser = (req, res) => {
     });
   });
 };
-
