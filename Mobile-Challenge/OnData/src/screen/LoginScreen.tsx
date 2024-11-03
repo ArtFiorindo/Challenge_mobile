@@ -51,18 +51,15 @@ const LoginScreen: React.FC = () => {
       <View style={styles.circleTop} />
       <View style={styles.circleBottom} />
 
-      
       <View style={styles.header}>
         <Text style={styles.welcomeText}>Bem-Vindo</Text>
       </View>
 
-     
       <Image 
         source={require('../../assets/OnDataLogo.png')} 
         style={styles.logo}
       />
 
-    
       <TextInput
         placeholder="Username"
         value={username}
@@ -79,14 +76,19 @@ const LoginScreen: React.FC = () => {
         placeholderTextColor="#5c5c5c"
       />
 
-      
+      {/* Exibe o erro na frente dos elementos */}
+      {error && <Text style={styles.errorText}>{error}</Text>}
+
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
 
+      <TouchableOpacity onPress={() => navigation.navigate('ResetPasswordScreen')} style={{ marginTop: 20 }}>
+        <Text style={styles.loginLink}>Esqueceu a senha? Redefinir senha</Text>
+      </TouchableOpacity>
+
       <Text style={styles.orText}>ou</Text>
 
-  
       <TouchableOpacity style={styles.socialButtonGoogle}>
         <FontAwesome name="google" size={20} color="#000" />
         <Text style={styles.socialButtonText}>Conecte com o Google</Text>
@@ -100,11 +102,6 @@ const LoginScreen: React.FC = () => {
       <TouchableOpacity onPress={handleNavigateToRegister} style={styles.registerLink}>
         <Text style={styles.registerText}>Não tem uma conta? Cadastre-se</Text>
       </TouchableOpacity>
-
-
-
-     
-      {error && <Text style={styles.errorText}>{error}</Text>}
     </View>
   );
 };
@@ -126,6 +123,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -200,
     right: -100,
+    zIndex: -1,
   },
   circleBottom: {
     width: 300,
@@ -135,6 +133,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: -100,
     left: -80,
+    zIndex: -1,
   },
   welcomeText: {
     fontSize: 28,
@@ -217,7 +216,12 @@ const styles = StyleSheet.create({
     color: 'red',
     marginTop: 10,
     textAlign: 'center',
+    zIndex: 1,  
+    width: '100%',
   },
+  loginLink: {
+    color: '#8f45fe',
+  }
 });
 
 export default LoginScreen;

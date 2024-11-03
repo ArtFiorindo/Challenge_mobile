@@ -7,6 +7,7 @@ import RegisterScreen from '../screen/RegisterScreen';
 import CadastroPacienteScreen from '../screen/CadastroPacienteScreen';
 import DetalhesPacienteScreen from '../screen/DetalhesPacienteScreen';
 import ConfiguracaoScreen from '../screen/ConfiguracaoScreen';
+import ResetPasswordScreen from '../screen/ResetPasswordScreen';
 
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -26,6 +27,12 @@ const AppNavigator: React.FC = () => {
           name="RegisterScreen" 
           component={RegisterScreen} 
           options={{ title: 'Cadastro' }} 
+        />
+
+        <Stack.Screen 
+          name="ResetPasswordScreen" 
+          component={ResetPasswordScreen} 
+          options={{ title: 'Redefinir Senha' }} 
         />
 
 

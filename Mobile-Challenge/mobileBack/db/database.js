@@ -15,12 +15,11 @@ db.serialize(() => {
     CREATE TABLE IF NOT EXISTS usuarios (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       username TEXT NOT NULL UNIQUE,
+      email TEXT NOT NULL UNIQUE,
       password TEXT NOT NULL,
-
       role TEXT NOT NULL DEFAULT 'user'
     )
   `);
-
 
   db.run(`
     CREATE TABLE IF NOT EXISTS pacientes (
@@ -32,8 +31,6 @@ db.serialize(() => {
       descricao TEXT
     )
   `);
-
-  
 });
 
 module.exports = db;

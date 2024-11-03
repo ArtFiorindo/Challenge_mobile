@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { View, TextInput, Text, TouchableOpacity, Alert, StyleSheet, Image, ScrollView, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Logo from '../../assets/OnDataLogo.png';  
+import Logo from '../../assets/OnDataLogo.png';
 
-const { height, width } = Dimensions.get('window'); 
+const { height, width } = Dimensions.get('window');
 
 const RegisterScreen: React.FC = () => {
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [cnpj, setCnpj] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [cnpj, setCnpj] = useState('');
-  const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
 
   const handleRegister = async () => {
-    if (!username || !password || !confirmPassword || !cnpj || !email) {
+    if (!username || !email || !cnpj || !password || !confirmPassword) {
       Alert.alert('Erro', 'Todos os campos são obrigatórios.');
       return;
     }
@@ -35,9 +35,9 @@ const RegisterScreen: React.FC = () => {
         },
         body: JSON.stringify({
           username,
-          password,
-          cnpj,
           email,
+          cnpj,
+          password,
           role: 'user',  
         }),
       });
@@ -62,7 +62,6 @@ const RegisterScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      {/* Círculos de fundo */}
       <View style={styles.topCircle} />
       <View style={styles.bottomCircle} />
 
