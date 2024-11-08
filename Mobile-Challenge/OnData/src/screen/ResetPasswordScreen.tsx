@@ -15,6 +15,7 @@ const ResetPasswordScreen: React.FC = () => {
   const [confirmNewPassword, setConfirmNewPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const navigation = useNavigation<ResetPasswordScreenNavigationProp>();
 
   const handleResetPassword = async () => {
@@ -46,8 +47,10 @@ const ResetPasswordScreen: React.FC = () => {
 
       if (response.ok) {
         setError(null);
-        alert('Senha redefinida com sucesso!');
-        navigation.navigate('LoginScreen');
+        setSuccessMessage('Senha redefinida com sucesso!');
+        setTimeout(() => {
+          navigation.navigate('LoginScreen');
+        }, 2000); // Redireciona após 2 segundos
       } else {
         const errorData = await response.json();
         setError(errorData.error || 'Erro ao redefinir a senha');
@@ -61,7 +64,6 @@ const ResetPasswordScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      {/* Círculos de fundo */}
       <View style={styles.circleTop} />
       <View style={styles.circleBottom} />
 
@@ -98,6 +100,11 @@ const ResetPasswordScreen: React.FC = () => {
         <TouchableOpacity style={styles.button} onPress={handleResetPassword} disabled={loading}>
           <Text style={styles.buttonText}>Redefinir Senha</Text>
         </TouchableOpacity>
+
+        {/* Exibe mensagem de sucesso */}
+        {successMessage && (
+          <Text style={styles.successText}>{successMessage}</Text>
+        )}
 
         {/* Exibe a mensagem de erro, se houver */}
         {error && <Text style={styles.errorText}>{error}</Text>}
@@ -173,6 +180,12 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  successText: {
+    color: 'green',
+    marginTop: 10,
+    textAlign: 'center',
+    fontSize: 16,
   },
   errorText: {
     color: 'red',

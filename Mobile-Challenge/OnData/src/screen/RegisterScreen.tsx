@@ -14,6 +14,19 @@ const RegisterScreen: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
 
+  // Função para formatar o CNPJ
+  const handleCnpjChange = (text: string) => {
+    let formattedCnpj = text.replace(/\D/g, ''); // Remove caracteres não numéricos
+    if (formattedCnpj.length > 14) {
+      formattedCnpj = formattedCnpj.slice(0, 14); // Limita a 14 caracteres
+    }
+    formattedCnpj = formattedCnpj.replace(/(\d{2})(\d)/, '$1.$2');
+    formattedCnpj = formattedCnpj.replace(/(\d{3})(\d)/, '$1.$2');
+    formattedCnpj = formattedCnpj.replace(/(\d{3})(\d{4})/, '$1/$2');
+    formattedCnpj = formattedCnpj.replace(/(\d{4})(\d{2})$/, '$1-$2');
+    setCnpj(formattedCnpj);
+  };
+
   const handleRegister = async () => {
     if (!username || !email || !cnpj || !password || !confirmPassword) {
       Alert.alert('Erro', 'Todos os campos são obrigatórios.');
@@ -86,7 +99,7 @@ const RegisterScreen: React.FC = () => {
         <TextInput
           placeholder="CNPJ"
           value={cnpj}
-          onChangeText={setCnpj}
+          onChangeText={handleCnpjChange} // Aplicar formatação automática
           keyboardType="numeric"
           style={styles.input}
         />
