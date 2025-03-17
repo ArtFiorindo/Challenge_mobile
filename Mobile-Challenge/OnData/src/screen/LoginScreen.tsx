@@ -26,15 +26,15 @@ const LoginScreen: React.FC = () => {
           role: 'user',
         }),
       });
-
+  
       if (!response.ok) {
         throw new Error('Erro ao fazer login');
       }
-
+  
       const { token } = await response.json();
       await AsyncStorage.setItem('token', token); 
       setError(null);
-      navigation.replace('CadastroPacienteScreen');
+      navigation.replace('HomeScreen'); // Redireciona para a HomeScreen
     } catch (error) {
       setError('Erro de autenticação. Verifique suas credenciais.');
       Alert.alert('Erro', 'Não foi possível fazer login. Verifique as credenciais e tente novamente.');
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
   },
   welcomeText: {
     fontSize: 28,
-    color: '#fff',
+    color: '#000000',
     fontWeight: 'bold',
   },
   logo: {
