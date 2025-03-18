@@ -16,8 +16,8 @@ OnData é uma aplicação móvel para cadastro de pacientes, desenvolvida em Rea
 - [Funcionalidades](#funcionalidades)
 - [Componentes](#componentes)
 - [Validações de Formulário](#validações-de-formulário)
-- [Screenshots](#screenshots)
 - [Tecnologias Usadas](#tecnologias-usadas)
+- [Atualizações Recentes](#atualizações-recentes)
 
 ---
 
@@ -50,22 +50,22 @@ Antes de começar, você vai precisar ter instalado em sua máquina as seguintes
 
 ### 1. Clone este repositório:
 
-bash
+```bash
 git clone https://github.com/seu-usuario/OnData.git
 cd OnData
-
+```
 
 ### 2. Instale as dependências do projeto:
 
-bash
+```bash
 yarn add install
-
+```
 
 ### 3. Instale o JSON Server globalmente (caso não tenha):
 
-bash
+```bash
 npm install -g json-server
-
+```
 
 ---
 
@@ -75,11 +75,13 @@ Para simular o backend, utilizaremos o JSON Server.
 
 1. Execute o JSON Server para iniciar a API de exemplo:
 
-bash
+```bash
 json-server --watch db.json --port 3000
+```
  ou
+```bash
 node server.js
-
+```
 
 A API estará disponível em `http://localhost:3000`.
 
@@ -95,9 +97,9 @@ Certifique-se de que o Expo está instalado e configurado corretamente.
 
 1. Com o JSON Server rodando, inicie o aplicativo com o Expo:
 
-bash
+```bash
 yarn start
-
+```
 
 2 Aperte W dentro do terminal para rodar a aplicação no seu navegador WEB ou no seu emulador
 
@@ -136,6 +138,7 @@ OnData/
 │   │   ├── ConfiguracaoScreen.tsx       # Tela de configurações do aplicativo
 │   │   ├── DetalhesPacienteScreen.tsx   # Tela de detalhes do paciente
 │   │   ├── LoginScreen.tsx              # Tela de login do usuário
+│   │   ├── HomeScreen.tsx               # Tela inicial do aplicativo
 │   │   └── RegisterScreen.tsx           # Tela de registro de novos usuários
 ├── .gitignore                      # Arquivo para ignorar arquivos/pastas no Git
 ├── App.tsx                         # Arquivo principal do aplicativo, ponto de entrada
@@ -154,6 +157,7 @@ OnData/
 - **Visualizar Detalhes**: Visualize informações detalhadas sobre o paciente.
 - **Validação de Formulário**: O formulário impede o envio se todos os campos obrigatórios não estiverem preenchidos.
 - **Formatação Automática**: O CPF e a Data de Nascimento são formatados automaticamente durante a digitação.
+- **Navegação via Footer**: Acesso rápido às principais telas através do rodapé navegável.
 
 ---
 
@@ -163,6 +167,7 @@ OnData/
 - **ListaPacientes**: Lista de todos os pacientes cadastrados.
 - **PacienteItem**: Exibe informações resumidas do paciente e permite editar ou excluir.
 - **DetalhesPacienteScreen**: Tela para visualização detalhada dos dados de um paciente.
+- **Footer**: Componente de navegação inferior presente em todas as telas.
 
 ---
 
@@ -174,17 +179,6 @@ OnData/
 
 ---
 
-## Screenshots
-
-### Tela de Cadastro
-
-![Tela de Cadastro](https://via.placeholder.com/400x700)
-
-### Tela de Detalhes do Paciente
-
-![Tela de Detalhes](https://via.placeholder.com/400x700)
-
----
 
 ## Tecnologias Usadas
 
@@ -193,8 +187,19 @@ OnData/
 - [TypeScript](https://www.typescriptlang.org/)
 - [JSON Server](https://github.com/typicode/json-server)
 - [NativeBase](https://nativebase.io/)
+- [React Navigation](https://reactnavigation.org/)
+- [React Native Vector Icons](https://github.com/oblador/react-native-vector-icons)
 
 ---
 
+## Atualizações Recentes
 
+### Modernização da Interface (Março 2025)
 
+- **Design com Cards**: Implementação de cards mais definidos e arredondados para melhor visualização dos conteúdos.
+- **Footer Navegável**: Adição de um rodapé de navegação consistente em todas as telas para facilitar o acesso às principais funcionalidades.
+- **Elementos Visuais**: Inclusão de elementos decorativos como círculos de fundo para criar uma experiência visual mais agradável.
+- **Ícones**: Incorporação de ícones intuitivos usando a biblioteca React Native Vector Icons para melhorar a usabilidade.
+- **Paleta de Cores**: Manutenção da identidade visual baseada nas cores originais (#8C82FC, #E2E0FF) com ajustes de contraste para melhor legibilidade.
+- **Cards Interativos**: Melhoria na interatividade dos cards com efeitos visuais de feedback ao toque.
+- **Formulários Modernizados**: Reformulação dos formulários para uma experiência mais intuitiva e agradável.
