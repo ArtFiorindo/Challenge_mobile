@@ -22,20 +22,20 @@ exports.registerUser = (req, res) => {
   });
 };
 
-// Login de usuário usando `username`
+// Login de usuário usando `email`
 exports.loginUser = (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
-  // Busca o usuário pelo `username`
-  db.get("SELECT * FROM usuarios WHERE username = ?", [username], (err, user) => {
+  // Busca o usuário pelo `email`
+  db.get("SELECT * FROM usuarios WHERE email = ?", [email], (err, user) => {
     if (err || !user) {
-      return res.status(401).json({ error: 'Usuário ou senha inválidos' });
+      return res.status(401).json({ error: 'Email ou senha inválidos' });
     }
 
     // Compara a senha usando bcrypt
     bcrypt.compare(password, user.password, (err, isMatch) => {
       if (!isMatch || err) {
-        return res.status(401).json({ error: 'Usuário ou senha inválidos' });
+        return res.status(401).json({ error: 'Email ou senha inválidos' });
       }
 
       // Cria o token JWT

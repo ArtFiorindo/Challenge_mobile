@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { FontAwesome } from '@expo/vector-icons';
 
 const LoginScreen: React.FC = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -14,6 +14,17 @@ const LoginScreen: React.FC = () => {
   const API_URL = 'http://localhost:3000/api/login';
 
   const handleLogin = async () => {
+    // Validação básica de email
+    if (!email || !email.includes('@')) {
+      setError('Por favor, insira um email válido');
+      return;
+    }
+    
+    if (!password) {
+      setError('A senha é obrigatória');
+      return;
+    }
+    
     try {
       const response = await fetch(API_URL, {
         method: 'POST',
@@ -21,7 +32,7 @@ const LoginScreen: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username,
+          email,
           password,
           role: 'user',
         }),
@@ -61,9 +72,10 @@ const LoginScreen: React.FC = () => {
       />
 
       <TextInput
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
         style={styles.input}
         placeholderTextColor="#5c5c5c"
       />
@@ -135,6 +147,9 @@ const styles = StyleSheet.create({
     left: -80,
     zIndex: -1,
   },
+  header: {
+    marginBottom: 20,
+  },
   welcomeText: {
     fontSize: 28,
     color: '#000000',
@@ -171,7 +186,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   orText: {
-    color: '#ffffff',
+    color: '#000000',
     fontSize: 14,
     marginVertical: 10,
   },
