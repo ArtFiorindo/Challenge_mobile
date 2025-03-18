@@ -140,12 +140,12 @@ const styles = StyleSheet.create({
     overflow: 'hidden', // Contém os círculos decorativos
   },
   circleTop: {
-    width: 300,
-    height: 300,
+    width: 350,
+    height: 350,
     backgroundColor: '#E2E0FF',
-    borderRadius: 150,
+    borderRadius: 300,
     position: 'absolute',
-    top: -150,
+    top: -50,
     right: -50,
     zIndex: -1,
   },

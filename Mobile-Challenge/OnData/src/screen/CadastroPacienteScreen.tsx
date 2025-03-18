@@ -27,6 +27,7 @@ const CadastroPacienteScreen: React.FC = () => {
       <View style={styles.container}>
         <View style={styles.circleTop} />
         <View style={styles.circleBottom} />
+        <View style={styles.circleMid} />
         
         <View style={styles.header}>
           <TouchableOpacity 
@@ -146,7 +147,18 @@ const styles = StyleSheet.create({
     borderRadius: 150,
     position: 'absolute',
     bottom: -100,
-    left: -80,
+    left: 95,
+    zIndex: -1,
+    opacity: 0.8, // Reduz levemente a opacidade para não causar problemas visuais
+  },
+  circleMid: {
+    width: 225,
+    height: 225,
+    backgroundColor: '#e6e4ff',
+    borderRadius: 112.5,
+    position: 'absolute',
+    bottom: 250,
+    left: -70,
     zIndex: -1,
     opacity: 0.8, // Reduz levemente a opacidade para não causar problemas visuais
   },

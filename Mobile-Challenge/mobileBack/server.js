@@ -1,4 +1,4 @@
-const app = require('./app'); // Importa a configuração do app
+const app = require('./app'); 
 const PORT = 3000;
 
 // Inicia o servidor
