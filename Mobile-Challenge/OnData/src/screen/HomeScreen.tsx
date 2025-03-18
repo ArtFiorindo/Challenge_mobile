@@ -13,9 +13,6 @@ const HomeScreen: React.FC = () => {
         <View style={styles.circleTop} />
         <View style={styles.circleBottom} />
         
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>OnData</Text>
-        </View>
 
         <View style={styles.content}>
           <Image 
@@ -99,23 +96,23 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   circleTop: {
-    width: 320,
-    height: 320,
-    backgroundColor: '#E2E0FF',
-    borderRadius: 160,
+    width: 400,
+    height: 400,
+    backgroundColor: '#8C82FC',
+    borderRadius: 290,
     position: 'absolute',
     top: -160,
-    right: -80,
+    left: -80,
     zIndex: -1,
   },
   circleBottom: {
     width: 240,
     height: 240,
-    backgroundColor: '#E2E0FF',
+    backgroundColor: '#8C82FC',
     borderRadius: 120,
     position: 'absolute',
     bottom: -80,
-    left: -60,
+    right: -60,
     zIndex: -1,
   },
   header: {
@@ -138,9 +135,9 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   logo: {
-    width: 120,
-    height: 120,
-    marginBottom: 10,
+    width: 220,
+    height: 220,
+    marginTop: 100,
   },
   title: {
     fontSize: 24,
