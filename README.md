@@ -108,10 +108,11 @@ yarn start
 
 ## Uso
 
-1. **Cadastro de Pacientes**: Preencha o formulário com os dados do paciente e clique em "Adicionar Paciente".
-2. **Editar Paciente**: Clique no botão "Editar" ao lado do nome do paciente, faça as alterações e salve.
-3. **Excluir Paciente**: Clique no botão "Excluir" para remover o paciente da lista.
-4. **Detalhes do Paciente**: Clique no nome do paciente para visualizar seus detalhes.
+1. **Login**: Acesse o sistema utilizando seu email e senha.
+2. **Cadastro de Pacientes**: Preencha o formulário com os dados do paciente e clique em "Adicionar Paciente".
+3. **Editar Paciente**: Clique no botão "Editar" ao lado do nome do paciente, faça as alterações e salve.
+4. **Excluir Paciente**: Clique no botão "Excluir" para remover o paciente da lista.
+5. **Detalhes do Paciente**: Clique no nome do paciente para visualizar seus detalhes.
 
 ---
 
@@ -139,7 +140,9 @@ OnData/
 │   │   ├── DetalhesPacienteScreen.tsx   # Tela de detalhes do paciente
 │   │   ├── LoginScreen.tsx              # Tela de login do usuário
 │   │   ├── HomeScreen.tsx               # Tela inicial do aplicativo
-│   │   └── RegisterScreen.tsx           # Tela de registro de novos usuários
+│   │   ├── RegisterScreen.tsx           # Tela de registro de novos usuários
+│   │   ├── PerfilUsuarioScreen.tsx      # Tela para editar e configura informacões como email e senha
+│   │   └── ResetPasswordScreen.tsx      # Tela de redefinição de senha
 ├── .gitignore                      # Arquivo para ignorar arquivos/pastas no Git
 ├── App.tsx                         # Arquivo principal do aplicativo, ponto de entrada
 └── README.md                       # Documentação do projeto
@@ -151,6 +154,8 @@ OnData/
 
 ## Funcionalidades
 
+- **Autenticação de Usuários**: Sistema de login e cadastro usando email e senha.
+- **Redefinição de Senha**: Possibilidade de redefinir a senha através do email cadastrado.
 - **Cadastrar Pacientes**: Adicione novos pacientes preenchendo os campos obrigatórios do formulário.
 - **Editar Pacientes**: Edite os dados dos pacientes previamente cadastrados.
 - **Excluir Pacientes**: Remova pacientes da lista.
@@ -163,6 +168,9 @@ OnData/
 
 ## Componentes
 
+- **LoginScreen**: Tela de autenticação de usuários usando email e senha.
+- **RegisterScreen**: Cadastro de novos usuários no sistema.
+- **ResetPasswordScreen**: Redefinição de senha através do email cadastrado.
 - **AdicionarPaciente**: Componente responsável pelo formulário de cadastro e edição.
 - **ListaPacientes**: Lista de todos os pacientes cadastrados.
 - **PacienteItem**: Exibe informações resumidas do paciente e permite editar ou excluir.
@@ -173,6 +181,8 @@ OnData/
 
 ## Validações de Formulário
 
+- **Validação de Email**: O sistema verifica se o formato do email é válido ao fazer login ou cadastro.
+- **Validação de Senha**: Verifica se as senhas coincidem durante o cadastro ou redefinição.
 - **Campos obrigatórios**: O modal exibe uma mensagem de erro se algum campo obrigatório estiver vazio.
 - **Formatação de CPF**: A formatação do CPF adiciona automaticamente pontos e traço, permitindo apenas 11 dígitos.
 - **Formatação de Data de Nascimento**: A formatação da data de nascimento adiciona automaticamente as barras (`/`), permitindo apenas 8 dígitos.
@@ -189,10 +199,22 @@ OnData/
 - [NativeBase](https://nativebase.io/)
 - [React Navigation](https://reactnavigation.org/)
 - [React Native Vector Icons](https://github.com/oblador/react-native-vector-icons)
+- [AsyncStorage](https://github.com/react-native-async-storage/async-storage)
+- [Bcrypt](https://github.com/kelektiv/node.bcrypt.js)
+- [JWT](https://github.com/auth0/node-jsonwebtoken)
 
 ---
 
 ## Atualizações Recentes
+
+### Sistema de Autenticação (Março 2025)
+
+- **Login baseado em Email**: Implementação de autenticação usando email e senha em vez de nome de usuário.
+- **Redefinição de Senha**: Adição de funcionalidade para redefinir senha quando esquecida.
+- **Token JWT**: Implementação de autenticação via tokens JWT para maior segurança.
+- **AsyncStorage**: Utilização de AsyncStorage para persistir a sessão do usuário.
+- **Criptografia de Senha**: Uso de bcrypt para armazenar senhas de forma segura no banco de dados.
+- **Login Social**: Adição de opções para login via Google e Apple (implementação pendente).
 
 ### Modernização da Interface (Março 2025)
 
