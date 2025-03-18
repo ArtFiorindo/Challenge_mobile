@@ -9,19 +9,17 @@ const ConfiguracaoScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const handleLogout = async () => {
-    console.log('Logout button pressed'); // Add this to verify the function is being called
+    console.log('Logout button pressed');
     
     try {
       await AsyncStorage.removeItem('token');
       console.log('Token removed successfully');
       
-      // Use reset instead of navigate to prevent going back
       navigation.reset({
         index: 0,
         routes: [{ name: 'LoginScreen' }],
       });
       
-      // Show alert after navigation initiated
       Alert.alert(
         'Logout', 
         'Logout realizado com sucesso'
@@ -35,8 +33,10 @@ const ConfiguracaoScreen: React.FC = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <View style={styles.circleTop} />
-        <View style={styles.circleBottom} />
+        <View style={styles.backgroundContainer}>
+          <View style={styles.circleTop} />
+          <View style={styles.circleBottom} />
+        </View>
         
         <View style={styles.header}>
           <TouchableOpacity 
@@ -46,7 +46,7 @@ const ConfiguracaoScreen: React.FC = () => {
             <Icon name="arrow-left" size={24} color="#8C82FC" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Configurações</Text>
-          <View style={{width: 24}} /> {/* Spacer for alignment */}
+          <View style={{width: 24}} />
         </View>
         
         <View style={styles.content}>
@@ -88,11 +88,10 @@ const ConfiguracaoScreen: React.FC = () => {
             </TouchableOpacity>
           </View>
           
-          {/* Logout button - make sure this is directly bound to the handler */}
           <TouchableOpacity
             onPress={handleLogout}
             style={styles.logoutButton}
-            activeOpacity={0.5} // Make it more responsive
+            activeOpacity={0.5}
           >
             <Icon name="logout" size={20} color="#FFFFFF" />
             <Text style={styles.logoutText}>Logout</Text>
@@ -132,25 +131,32 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
+    overflow: 'hidden', // Impede o vazamento de conteúdo
+  },
+  backgroundContainer: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    overflow: 'hidden', // Contém os círculos decorativos
   },
   circleTop: {
-    width: 425,
-    height: 425,
-    backgroundColor: '#E2E0FF',
-    borderRadius: 200,
-    position: 'absolute',
-    top: -200,
-    right: -100,
-    zIndex: -1,
-  },
-  circleBottom: {
     width: 300,
     height: 300,
     backgroundColor: '#E2E0FF',
     borderRadius: 150,
     position: 'absolute',
-    bottom: -100,
-    left: -80,
+    top: -150,
+    right: -50,
+    zIndex: -1,
+  },
+  circleBottom: {
+    width: 250,
+    height: 250, 
+    backgroundColor: '#E2E0FF',
+    borderRadius: 125,
+    position: 'absolute',
+    bottom: -125,
+    left: -50,
     zIndex: -1,
   },
   header: {
@@ -172,6 +178,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
     paddingTop: 10,
+    paddingBottom: 10, // Garante espaço na parte inferior
   },
   card: {
     backgroundColor: '#FFFFFF',
@@ -205,55 +212,54 @@ const styles = StyleSheet.create({
     color: '#444444',
     marginLeft: 16,
   },
-    logoutButton: {
-      flexDirection: 'row',
-      backgroundColor: '#FF6B6B',
-      borderRadius: 12,
-      paddingVertical: 16,
-      paddingHorizontal: 24,
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginVertical: 20,
-      shadowColor: '#FF6B6B',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.2,
-      shadowRadius: 4,
-      elevation: 3
-    },
-    logoutText: {
-      fontSize: 16,
-      fontWeight: 'bold',
-      color: '#FFFFFF',
-      marginLeft: 10,
-    },
-    footer: {
-      flexDirection: 'row',
-      borderTopWidth: 1,
-      borderTopColor: '#F0F0F0',
-      backgroundColor: '#FFFFFF',
-      paddingBottom: 10,
-    },
-    footerTab: {
-      flex: 1,
-      alignItems: 'center',
-      paddingVertical: 12,
-    },
-    footerTabActive: {
-      borderTopWidth: 3,
-      borderTopColor: '#8C82FC',
-      paddingTop: 9,
-    },
-    footerTabText: {
-      color: '#777777',
-      fontSize: 12,
-      marginTop: 4,
-    },
-    footerTabTextActive: {
-      color: '#8C82FC',
-      fontSize: 12,
-      fontWeight: 'bold',
-      marginTop: 4,
-    },
-  });
+  logoutButton: {
+    flexDirection: 'row',
+    backgroundColor: '#FF6B6B',
+    borderRadius: 12,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 10, // Reduzido para economizar espaço
+    shadowColor: '#FF6B6B',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3
+  },
+  logoutText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginLeft: 10,
+  },
+  footer: {
+    flexDirection: 'row',
+    borderTopWidth: 1,
+    borderTopColor: '#F0F0F0',
+    backgroundColor: '#FFFFFF',
+  },
+  footerTab: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 8, // Reduzido para economizar espaço
+  },
+  footerTabActive: {
+    borderTopWidth: 3,
+    borderTopColor: '#8C82FC',
+    paddingTop: 5, // Ajustado para compensar a borda
+  },
+  footerTabText: {
+    color: '#777777',
+    fontSize: 12,
+    marginTop: 4,
+  },
+  footerTabTextActive: {
+    color: '#8C82FC',
+    fontSize: 12,
+    fontWeight: 'bold',
+    marginTop: 4,
+  },
+});
   
-  export default ConfiguracaoScreen;
+export default ConfiguracaoScreen;

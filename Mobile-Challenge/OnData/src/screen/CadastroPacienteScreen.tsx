@@ -20,6 +20,8 @@ const CadastroPacienteScreen: React.FC = () => {
     setMostrarForm(false);
   };
 
+  
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -80,7 +82,10 @@ const CadastroPacienteScreen: React.FC = () => {
             style={styles.fab}
             onPress={() => setMostrarForm(true)}
           >
-            <Icon name="plus" size={24} color="#FFFFFF" />
+            <View style={styles.fabContent}>
+              <Icon name="plus" size={20} color="#FFFFFF" />
+              <Text style={styles.fabText}>Cadastro de Paciente & Sinistro</Text>
+            </View>
           </TouchableOpacity>
         )}
 
@@ -109,24 +114,30 @@ const CadastroPacienteScreen: React.FC = () => {
   );
 };
 
+
+
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#FFFFFF',
+    width: '100%', // Garante que não haja vazamento horizontal
   },
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
+    width: '100%', // Previne vazamento horizontal
+    overflow: 'hidden', // Esconde qualquer conteúdo que vaze
   },
   circleTop: {
     width: 425,
     height: 425,
     backgroundColor: '#e6e4ff',
-    borderRadius: 200,
+    borderRadius: 212.5, // Metade do width/height
     position: 'absolute',
     top: -200,
     right: -100,
     zIndex: -1,
+    opacity: 0.8, // Reduz levemente a opacidade para não causar problemas visuais
   },
   circleBottom: {
     width: 300,
@@ -137,6 +148,7 @@ const styles = StyleSheet.create({
     bottom: -100,
     left: -80,
     zIndex: -1,
+    opacity: 0.8, // Reduz levemente a opacidade para não causar problemas visuais
   },
   header: {
     flexDirection: 'row',
@@ -155,11 +167,13 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+    overflow: 'hidden', // Impede que o conteúdo vaze para fora
   },
   scrollContent: {
     paddingHorizontal: 20,
     paddingTop: 10,
-    paddingBottom: 80, // For FAB button
+    paddingBottom: 80, // Espaço para os botões de ação
+    flexGrow: 1, // Permite o scroll crescer conforme necessário
   },
   formCard: {
     backgroundColor: '#FFFFFF',
@@ -188,10 +202,10 @@ const styles = StyleSheet.create({
   fab: {
     position: 'absolute',
     right: 20,
-    bottom: 80,
+    bottom: 100,
     backgroundColor: '#8C82FC',
-    width: 56,
-    height: 56,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     borderRadius: 28,
     justifyContent: 'center',
     alignItems: 'center',
@@ -199,7 +213,19 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
-    elevation: 8
+    elevation: 8,
+    zIndex: 10, // Garante que o FAB fique acima de outros elementos
+  },
+  fabContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center', // Centraliza o conteúdo do FAB
+  },
+  fabText: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    fontSize: 14,
+    marginLeft: 8,
   },
   footer: {
     flexDirection: 'row',
@@ -207,6 +233,9 @@ const styles = StyleSheet.create({
     borderTopColor: '#F0F0F0',
     backgroundColor: '#FFFFFF',
     paddingBottom: 10,
+    width: '100%', // Garante que o footer não vaze
+    position: 'absolute', // Fixa o footer na parte inferior
+    bottom: 0, // Fixa na parte inferior
   },
   footerTab: {
     flex: 1,
@@ -229,6 +258,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 4,
   },
+  
 });
 
 export default CadastroPacienteScreen;
