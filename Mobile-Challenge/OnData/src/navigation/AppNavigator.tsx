@@ -9,6 +9,7 @@ import DetalhesPacienteScreen from '../screen/DetalhesPacienteScreen';
 import ConfiguracaoScreen from '../screen/ConfiguracaoScreen';
 import ResetPasswordScreen from '../screen/ResetPasswordScreen';
 import HomeScreen from '../screen/HomeScreen'; 
+import PerfilUsuarioScreen from '../screen/PerfilUsuarioScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -60,6 +61,12 @@ const AppNavigator: React.FC = () => {
           name="DetalhesPacienteScreen" 
           component={DetalhesPacienteScreen} 
           options={{ title: 'Detalhes do Paciente' }} 
+          options={{ headerShown: false }} 
+        />
+        <Stack.Screen 
+          name="PerfilUsuarioScreen" 
+          component={PerfilUsuarioScreen} 
+          options={{ title: 'Perfil do Usuario' }} 
           options={{ headerShown: false }} 
         />
       </Stack.Navigator>

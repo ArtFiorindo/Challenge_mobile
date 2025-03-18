@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../db/database');
 
-// Cadastro de usuário
+
 exports.registerUser = (req, res) => {
   const { username, email, password, role = 'user' } = req.body;
 
@@ -73,6 +73,56 @@ exports.resetPassword = (req, res) => {
           res.status(200).json({ message: 'Senha redefinida com sucesso!' });
         });
       });
+    });
+  });
+};
+
+
+// Buscar perfil do usuário
+exports.getUserProfile = (req, res) => {
+  // Obter ID do usuário do token JWT (adicionado pelo middleware de autenticação)
+  const userId = req.user.id;
+  
+  db.get("SELECT id, username, email, role FROM usuarios WHERE id = ?", [userId], (err, user) => {
+    if (err) {
+      return res.status(500).json({ error: 'Erro ao buscar dados do usuário' });
+    }
+    
+    if (!user) {
+      return res.status(404).json({ error: 'Usuário não encontrado' });
+    }
+    
+    // Retorna os dados do usuário (exceto a senha)
+    res.status(200).json(user);
+  });
+};
+
+// Atualizar email do usuário
+exports.updateUserEmail = (req, res) => {
+  const userId = req.user.id;
+  const { email } = req.body;
+  
+  if (!email || !email.trim()) {
+    return res.status(400).json({ error: 'Email não pode ser vazio' });
+  }
+  
+  // Verificar se o email já está em uso por outro usuário
+  db.get("SELECT id FROM usuarios WHERE email = ? AND id != ?", [email, userId], (err, existingUser) => {
+    if (err) {
+      return res.status(500).json({ error: 'Erro ao verificar disponibilidade do email' });
+    }
+    
+    if (existingUser) {
+      return res.status(400).json({ error: 'Este email já está em uso' });
+    }
+    
+    // Atualizar o email do usuário
+    db.run("UPDATE usuarios SET email = ? WHERE id = ?", [email, userId], (err) => {
+      if (err) {
+        return res.status(500).json({ error: 'Erro ao atualizar email' });
+      }
+      
+      res.status(200).json({ message: 'Email atualizado com sucesso' });
     });
   });
 };

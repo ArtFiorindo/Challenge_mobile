@@ -244,20 +244,17 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#F0F0F0',
     backgroundColor: '#FFFFFF',
-    paddingBottom: 10,
-    width: '100%', // Garante que o footer não vaze
-    position: 'absolute', // Fixa o footer na parte inferior
-    bottom: 0, // Fixa na parte inferior
+    width: '100%',
   },
   footerTab: {
     flex: 1,
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: 10,
   },
   footerTabActive: {
     borderTopWidth: 3,
     borderTopColor: '#8C82FC',
-    paddingTop: 9,
+    paddingTop: 7,
   },
   footerTabText: {
     color: '#777777',

@@ -7,4 +7,5 @@ export type RootStackParamList = {
     CadastroPasswordScreen: undefined;
     DetalhesPacienteScreen: undefined;
     RegisterScreen: undefined;
+    PerfilUsuarioScreen: undefined; 
   };

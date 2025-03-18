@@ -53,33 +53,21 @@ const ConfiguracaoScreen: React.FC = () => {
           <View style={styles.card}>
             <Text style={styles.cardTitle}>Opções da Conta</Text>
             
-            <TouchableOpacity style={styles.optionItem}>
+            <TouchableOpacity 
+              style={styles.optionItem}
+              onPress={() => navigation.navigate('PerfilUsuarioScreen')}
+            >
               <Icon name="account-cog" size={24} color="#8C82FC" />
               <Text style={styles.optionText}>Perfil do Usuário</Text>
               <Icon name="chevron-right" size={20} color="#AAAAAA" />
             </TouchableOpacity>
             
-            <TouchableOpacity style={styles.optionItem}>
-              <Icon name="bell-outline" size={24} color="#8C82FC" />
-              <Text style={styles.optionText}>Notificações</Text>
-              <Icon name="chevron-right" size={20} color="#AAAAAA" />
-            </TouchableOpacity>
-            
-            <TouchableOpacity style={styles.optionItem}>
-              <Icon name="shield-lock-outline" size={24} color="#8C82FC" />
-              <Text style={styles.optionText}>Segurança</Text>
-              <Icon name="chevron-right" size={20} color="#AAAAAA" />
-            </TouchableOpacity>
+          
           </View>
           
           <View style={styles.card}>
             <Text style={styles.cardTitle}>Aplicativo</Text>
-            
-            <TouchableOpacity style={styles.optionItem}>
-              <Icon name="theme-light-dark" size={24} color="#8C82FC" />
-              <Text style={styles.optionText}>Tema</Text>
-              <Icon name="chevron-right" size={20} color="#AAAAAA" />
-            </TouchableOpacity>
+           
             
             <TouchableOpacity style={styles.optionItem}>
               <Icon name="translate" size={24} color="#8C82FC" />
