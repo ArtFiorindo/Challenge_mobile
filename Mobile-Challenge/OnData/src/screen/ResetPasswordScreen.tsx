@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, Text, TouchableOpacity, StyleSheet, ScrollView, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Ionicons } from '@expo/vector-icons'; 
 
 type RootStackParamList = {
   LoginScreen: undefined;
@@ -66,6 +67,14 @@ const ResetPasswordScreen: React.FC = () => {
     <View style={styles.container}>
       <View style={styles.circleTop} />
       <View style={styles.circleBottom} />
+
+      {/* Back button */}
+      <TouchableOpacity 
+        style={styles.backButton} 
+        onPress={() => navigation.goBack()}
+      >
+        <Ionicons name="arrow-back" size={24} color="#8C82FC" />
+      </TouchableOpacity>
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Image 
@@ -145,6 +154,12 @@ const styles = StyleSheet.create({
     bottom: -100,
     left: -80,
   },
+  backButton: {
+    position: 'absolute',
+    top: 50,
+    left: 20,
+    zIndex: 10,
+  },
   logo: {
     width: 190,
     height: 190,
@@ -162,11 +177,11 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#d3d3d3',
+    borderColor: '#ffffff',
     paddingHorizontal: 15,
     marginBottom: 15,
-    backgroundColor: '#f0f0f0',
-    color: '#000',
+    backgroundColor: '#d4d4d4',
+    color: '#000000',
   },
   button: {
     width: '100%',
