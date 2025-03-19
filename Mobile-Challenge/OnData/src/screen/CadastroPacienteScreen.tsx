@@ -1,26 +1,145 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, FlatList, Alert } from 'react-native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Layout from '../components/Layout';
-import ListaPacientes from '../components/ListaPacientes';
+import axios from 'axios';
 import AdicionarPaciente from '../components/AdicionarPaciente';
 
-const CadastroPacienteScreen: React.FC = () => {
-  const [editandoPaciente, setEditandoPaciente] = useState<Paciente | null>(null);
+const CadastroPacienteScreen: React.FC = ({ route }) => {
+  const [editandoPaciente, setEditandoPaciente] = useState<any | null>(null);
   const [recarregarPacientes, setRecarregarPacientes] = useState(false);
   const [mostrarForm, setMostrarForm] = useState(false);
+  const [pacientes, setPacientes] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
+
+  // Verificar se há parâmetros de atualização de status
+  useEffect(() => {
+    if (route.params?.statusUpdated) {
+      // Recarregar a lista quando o status for atualizado
+      carregarPacientes();
+    }
+  }, [route.params?.statusUpdated]);
+
+  // Carregar a lista de pacientes ao iniciar
+  useEffect(() => {
+    carregarPacientes();
+  }, [recarregarPacientes]);
+
+  // Recarregar a lista quando a tela ganhar foco
+  useFocusEffect(
+    React.useCallback(() => {
+      carregarPacientes();
+      return () => {};
+    }, [])
+  );
+
+  const carregarPacientes = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get('http://localhost:3000/api/pacientes');
+      setPacientes(response.data);
+    } catch (error) {
+      console.error('Erro ao carregar pacientes:', error);
+      Alert.alert('Erro', 'Não foi possível carregar os pacientes');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleAdicionarPacienteSucesso = () => {
     // Implementar Toast
-    alert('Paciente adicionado com sucesso!');
+    Alert.alert('Sucesso', 'Paciente adicionado com sucesso!');
     setEditandoPaciente(null);
     setRecarregarPacientes(prev => !prev);
     setMostrarForm(false);
   };
 
-  
+  // Função para determinar o estilo do status
+  const getStatusStyle = (status) => {
+    switch (status) {
+      case 'aprovado':
+        return {
+          container: {
+            backgroundColor: '#E6F7EF',
+            paddingHorizontal: 8,
+            paddingVertical: 2,
+            borderRadius: 10,
+          },
+          text: { 
+            color: '#36B37E',
+            fontWeight: 'bold',
+            fontSize: 10
+          }
+        };
+      case 'recusado':
+        return {
+          container: {
+            backgroundColor: '#FFE9E9',
+            paddingHorizontal: 8,
+            paddingVertical: 2,
+            borderRadius: 10,
+          },
+          text: { 
+            color: '#FC8282',
+            fontWeight: 'bold',
+            fontSize: 10
+          }
+        };
+      default: // pendente
+        return {
+          container: {
+            backgroundColor: '#FFF8E6',
+            paddingHorizontal: 8,
+            paddingVertical: 2,
+            borderRadius: 10,
+          },
+          text: { 
+            color: '#FFB800',
+            fontWeight: 'bold',
+            fontSize: 10
+          }
+        };
+    }
+  };
+
+  // Renderizar cada item da lista de pacientes
+  const renderPacienteItem = ({ item }) => (
+    <TouchableOpacity
+      style={styles.pacienteCard}
+      onPress={() => navigation.navigate('DetalhesPacienteScreen', { paciente: item })}
+    >
+      <View style={styles.pacienteHeader}>
+        <View style={styles.pacienteIconContainer}>
+          <Icon name="account" size={24} color="#8C82FC" />
+        </View>
+        <View style={styles.pacienteInfo}>
+          <Text style={styles.pacienteNome}>{item.nome}</Text>
+          <View style={getStatusStyle(item.status).container}>
+            <Text style={getStatusStyle(item.status).text}>
+              {item.status || 'pendente'}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.actions}>
+          <TouchableOpacity 
+            style={styles.actionButton}
+            onPress={(e) => {
+              e.stopPropagation();
+              setEditandoPaciente(item);
+              setMostrarForm(true);
+            }}
+          >
+            <Icon name="pencil" size={20} color="#8C82FC" />
+          </TouchableOpacity>
+        </View>
+      </View>
+      <View style={styles.sinistroInfo}>
+        <Text style={styles.sinistroLabel}>Sinistro:</Text>
+        <Text style={styles.sinistroValue}>{item.sinistro}</Text>
+      </View>
+    </TouchableOpacity>
+  );
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -40,43 +159,52 @@ const CadastroPacienteScreen: React.FC = () => {
           <View style={{width: 24}} /> {/* Spacer for alignment */}
         </View>
         
-        <ScrollView 
-          style={styles.content}
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
-        >
+        <View style={styles.content}>
           {mostrarForm ? (
-            <View style={styles.formCard}>
-              <View style={styles.formHeader}>
-                <Text style={styles.formHeaderTitle}>
-                  {editandoPaciente ? 'Editar Paciente' : 'Novo Paciente'}
-                </Text>
-                <TouchableOpacity 
-                  onPress={() => {
-                    setMostrarForm(false);
-                    setEditandoPaciente(null);
-                  }}
-                >
-                  <Icon name="close" size={24} color="#8C82FC" />
-                </TouchableOpacity>
+            <ScrollView 
+              style={styles.scrollContent}
+              contentContainerStyle={styles.formScrollContent}
+              showsVerticalScrollIndicator={false}
+            >
+              <View style={styles.formCard}>
+                <View style={styles.formHeader}>
+                  <Text style={styles.formHeaderTitle}>
+                    {editandoPaciente ? 'Editar Paciente' : 'Novo Paciente'}
+                  </Text>
+                  <TouchableOpacity 
+                    onPress={() => {
+                      setMostrarForm(false);
+                      setEditandoPaciente(null);
+                    }}
+                  >
+                    <Icon name="close" size={24} color="#8C82FC" />
+                  </TouchableOpacity>
+                </View>
+                
+                <AdicionarPaciente 
+                  onAdicionarPaciente={handleAdicionarPacienteSucesso} 
+                  paciente={editandoPaciente} 
+                  setEditandoPaciente={setEditandoPaciente} 
+                />
               </View>
-              
-              <AdicionarPaciente 
-                onAdicionarPaciente={handleAdicionarPacienteSucesso} 
-                paciente={editandoPaciente} 
-                setEditandoPaciente={setEditandoPaciente} 
-              />
-            </View>
+            </ScrollView>
           ) : (
-            <ListaPacientes 
-              setEditandoPaciente={(paciente) => {
-                setEditandoPaciente(paciente);
-                setMostrarForm(true);
-              }} 
-              recarregarPacientes={recarregarPacientes} 
+            <FlatList
+              data={pacientes}
+              renderItem={renderPacienteItem}
+              keyExtractor={(item) => item.id.toString()}
+              contentContainerStyle={styles.listContent}
+              showsVerticalScrollIndicator={false}
+              refreshing={loading}
+              onRefresh={carregarPacientes}
+              ListEmptyComponent={() => (
+                <View style={styles.emptyContainer}>
+                  <Text style={styles.emptyText}>Nenhum paciente cadastrado</Text>
+                </View>
+              )}
             />
           )}
-        </ScrollView>
+        </View>
 
         {!mostrarForm && (
           <TouchableOpacity 
@@ -115,30 +243,29 @@ const CadastroPacienteScreen: React.FC = () => {
   );
 };
 
-
-
+// Estilos mantidos sem alteração
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    width: '100%', // Garante que não haja vazamento horizontal
+    width: '100%',
   },
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    width: '100%', // Previne vazamento horizontal
-    overflow: 'hidden', // Esconde qualquer conteúdo que vaze
+    width: '100%',
+    overflow: 'hidden',
   },
   circleTop: {
     width: 425,
     height: 425,
     backgroundColor: '#e6e4ff',
-    borderRadius: 212.5, // Metade do width/height
+    borderRadius: 212.5,
     position: 'absolute',
     top: -200,
     right: -100,
     zIndex: -1,
-    opacity: 0.8, // Reduz levemente a opacidade para não causar problemas visuais
+    opacity: 0.8,
   },
   circleBottom: {
     width: 300,
@@ -149,7 +276,7 @@ const styles = StyleSheet.create({
     bottom: -100,
     left: 95,
     zIndex: -1,
-    opacity: 0.8, // Reduz levemente a opacidade para não causar problemas visuais
+    opacity: 0.8,
   },
   circleMid: {
     width: 225,
@@ -160,7 +287,7 @@ const styles = StyleSheet.create({
     bottom: 250,
     left: -70,
     zIndex: -1,
-    opacity: 0.8, // Reduz levemente a opacidade para não causar problemas visuais
+    opacity: 0.8,
   },
   header: {
     flexDirection: 'row',
@@ -179,13 +306,21 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    overflow: 'hidden', // Impede que o conteúdo vaze para fora
+    overflow: 'hidden',
   },
   scrollContent: {
+    flex: 1,
+  },
+  formScrollContent: {
     paddingHorizontal: 20,
     paddingTop: 10,
-    paddingBottom: 80, // Espaço para os botões de ação
-    flexGrow: 1, // Permite o scroll crescer conforme necessário
+    paddingBottom: 80,
+    flexGrow: 1,
+  },
+  listContent: {
+    paddingHorizontal: 20,
+    paddingTop: 10,
+    paddingBottom: 80,
   },
   formCard: {
     backgroundColor: '#FFFFFF',
@@ -226,12 +361,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 5,
     elevation: 8,
-    zIndex: 10, // Garante que o FAB fique acima de outros elementos
+    zIndex: 10,
   },
   fabContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center', // Centraliza o conteúdo do FAB
+    justifyContent: 'center',
   },
   fabText: {
     color: '#FFFFFF',
@@ -267,7 +402,73 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 4,
   },
-  
+  // Novos estilos para a lista de pacientes
+  pacienteCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 12,
+    shadowColor: '#8C82FC',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
+    borderWidth: 1,
+    borderColor: '#F0F0FF',
+  },
+  pacienteHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  pacienteIconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#F0F0FF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  pacienteInfo: {
+    flex: 1,
+  },
+  pacienteNome: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333333',
+    marginBottom: 4,
+  },
+  sinistroInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 6,
+  },
+  sinistroLabel: {
+    fontSize: 12,
+    color: '#777777',
+    marginRight: 5,
+  },
+  sinistroValue: {
+    fontSize: 12,
+    color: '#333333',
+    fontWeight: '500',
+  },
+  actions: {
+    flexDirection: 'row',
+  },
+  actionButton: {
+    padding: 6,
+  },
+  emptyContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  emptyText: {
+    fontSize: 16,
+    color: '#777777',
+  },
 });
 
 export default CadastroPacienteScreen;
