@@ -1,145 +1,61 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, FlatList, Alert } from 'react-native';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, Alert } from 'react-native';
+import { useNavigation, useFocusEffect, RouteProp } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import axios from 'axios';
 import AdicionarPaciente from '../components/AdicionarPaciente';
+import ListaPacientes from '../components/ListaPacientes';
 
-const CadastroPacienteScreen: React.FC = ({ route }) => {
-  const [editandoPaciente, setEditandoPaciente] = useState<any | null>(null);
-  const [recarregarPacientes, setRecarregarPacientes] = useState(false);
-  const [mostrarForm, setMostrarForm] = useState(false);
-  const [pacientes, setPacientes] = useState([]);
-  const [loading, setLoading] = useState(true);
+// Definindo interfaces para TypeScript
+interface Paciente {
+  id: number;
+  nome: string;
+  cpf: string;
+  dataNascimento: string;
+  sinistro: string;
+  descricao: string;
+  status: string;
+}
+
+type RouteParams = {
+  params: {
+    statusUpdated?: boolean;
+    paciente?: Paciente;
+  };
+};
+
+const CadastroPacienteScreen: React.FC<{ route: RouteProp<RouteParams, 'params'> }> = ({ route }) => {
+  const [editandoPaciente, setEditandoPaciente] = useState<Paciente | null>(null);
+  const [recarregarPacientes, setRecarregarPacientes] = useState<boolean>(false);
+  const [mostrarForm, setMostrarForm] = useState<boolean>(false);
   const navigation = useNavigation();
 
   // Verificar se há parâmetros de atualização de status
   useEffect(() => {
     if (route.params?.statusUpdated) {
-      // Recarregar a lista quando o status for atualizado
-      carregarPacientes();
+      // Forçar recarga quando o status for atualizado
+      setRecarregarPacientes(prev => !prev);
     }
   }, [route.params?.statusUpdated]);
-
-  // Carregar a lista de pacientes ao iniciar
-  useEffect(() => {
-    carregarPacientes();
-  }, [recarregarPacientes]);
 
   // Recarregar a lista quando a tela ganhar foco
   useFocusEffect(
     React.useCallback(() => {
-      carregarPacientes();
+      setRecarregarPacientes(prev => !prev);
       return () => {};
     }, [])
   );
 
-  const carregarPacientes = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get('http://localhost:3000/api/pacientes');
-      setPacientes(response.data);
-    } catch (error) {
-      console.error('Erro ao carregar pacientes:', error);
-      Alert.alert('Erro', 'Não foi possível carregar os pacientes');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleAdicionarPacienteSucesso = () => {
-    // Implementar Toast
     Alert.alert('Sucesso', 'Paciente adicionado com sucesso!');
     setEditandoPaciente(null);
     setRecarregarPacientes(prev => !prev);
     setMostrarForm(false);
   };
 
-  // Função para determinar o estilo do status
-  const getStatusStyle = (status) => {
-    switch (status) {
-      case 'aprovado':
-        return {
-          container: {
-            backgroundColor: '#E6F7EF',
-            paddingHorizontal: 8,
-            paddingVertical: 2,
-            borderRadius: 10,
-          },
-          text: { 
-            color: '#36B37E',
-            fontWeight: 'bold',
-            fontSize: 10
-          }
-        };
-      case 'recusado':
-        return {
-          container: {
-            backgroundColor: '#FFE9E9',
-            paddingHorizontal: 8,
-            paddingVertical: 2,
-            borderRadius: 10,
-          },
-          text: { 
-            color: '#FC8282',
-            fontWeight: 'bold',
-            fontSize: 10
-          }
-        };
-      default: // pendente
-        return {
-          container: {
-            backgroundColor: '#FFF8E6',
-            paddingHorizontal: 8,
-            paddingVertical: 2,
-            borderRadius: 10,
-          },
-          text: { 
-            color: '#FFB800',
-            fontWeight: 'bold',
-            fontSize: 10
-          }
-        };
-    }
+  const handleSetEditandoPaciente = (paciente: Paciente) => {
+    setEditandoPaciente(paciente);
+    setMostrarForm(true);
   };
-
-  // Renderizar cada item da lista de pacientes
-  const renderPacienteItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.pacienteCard}
-      onPress={() => navigation.navigate('DetalhesPacienteScreen', { paciente: item })}
-    >
-      <View style={styles.pacienteHeader}>
-        <View style={styles.pacienteIconContainer}>
-          <Icon name="account" size={24} color="#8C82FC" />
-        </View>
-        <View style={styles.pacienteInfo}>
-          <Text style={styles.pacienteNome}>{item.nome}</Text>
-          <View style={getStatusStyle(item.status).container}>
-            <Text style={getStatusStyle(item.status).text}>
-              {item.status || 'pendente'}
-            </Text>
-          </View>
-        </View>
-        <View style={styles.actions}>
-          <TouchableOpacity 
-            style={styles.actionButton}
-            onPress={(e) => {
-              e.stopPropagation();
-              setEditandoPaciente(item);
-              setMostrarForm(true);
-            }}
-          >
-            <Icon name="pencil" size={20} color="#8C82FC" />
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View style={styles.sinistroInfo}>
-        <Text style={styles.sinistroLabel}>Sinistro:</Text>
-        <Text style={styles.sinistroValue}>{item.sinistro}</Text>
-      </View>
-    </TouchableOpacity>
-  );
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -189,20 +105,13 @@ const CadastroPacienteScreen: React.FC = ({ route }) => {
               </View>
             </ScrollView>
           ) : (
-            <FlatList
-              data={pacientes}
-              renderItem={renderPacienteItem}
-              keyExtractor={(item) => item.id.toString()}
-              contentContainerStyle={styles.listContent}
-              showsVerticalScrollIndicator={false}
-              refreshing={loading}
-              onRefresh={carregarPacientes}
-              ListEmptyComponent={() => (
-                <View style={styles.emptyContainer}>
-                  <Text style={styles.emptyText}>Nenhum paciente cadastrado</Text>
-                </View>
-              )}
-            />
+            <View style={styles.listContainer}>
+              <ListaPacientes 
+                setEditandoPaciente={handleSetEditandoPaciente}
+                recarregarPacientes={recarregarPacientes}
+                mostrarForm={setMostrarForm}
+              />
+            </View>
           )}
         </View>
 
@@ -221,7 +130,7 @@ const CadastroPacienteScreen: React.FC = ({ route }) => {
         <View style={styles.footer}>
           <TouchableOpacity 
             style={styles.footerTab}
-            onPress={() => navigation.navigate('HomeScreen')}
+            onPress={() => navigation.navigate('HomeScreen' as never)}
           >
             <Icon name="home" size={24} color="#777777" />
             <Text style={styles.footerTabText}>Home</Text>
@@ -232,7 +141,7 @@ const CadastroPacienteScreen: React.FC = ({ route }) => {
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.footerTab}
-            onPress={() => navigation.navigate('ConfiguracaoScreen')}
+            onPress={() => navigation.navigate('ConfiguracaoScreen' as never)}
           >
             <Icon name="cog" size={24} color="#777777" />
             <Text style={styles.footerTabText}>Config</Text>
@@ -243,7 +152,6 @@ const CadastroPacienteScreen: React.FC = ({ route }) => {
   );
 };
 
-// Estilos mantidos sem alteração
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
@@ -317,7 +225,8 @@ const styles = StyleSheet.create({
     paddingBottom: 80,
     flexGrow: 1,
   },
-  listContent: {
+  listContainer: {
+    flex: 1,
     paddingHorizontal: 20,
     paddingTop: 10,
     paddingBottom: 80,
@@ -401,73 +310,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
     marginTop: 4,
-  },
-  // Novos estilos para a lista de pacientes
-  pacienteCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 12,
-    shadowColor: '#8C82FC',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 4,
-    borderWidth: 1,
-    borderColor: '#F0F0FF',
-  },
-  pacienteHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  pacienteIconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#F0F0FF',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  pacienteInfo: {
-    flex: 1,
-  },
-  pacienteNome: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333333',
-    marginBottom: 4,
-  },
-  sinistroInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 6,
-  },
-  sinistroLabel: {
-    fontSize: 12,
-    color: '#777777',
-    marginRight: 5,
-  },
-  sinistroValue: {
-    fontSize: 12,
-    color: '#333333',
-    fontWeight: '500',
-  },
-  actions: {
-    flexDirection: 'row',
-  },
-  actionButton: {
-    padding: 6,
-  },
-  emptyContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-  },
-  emptyText: {
-    fontSize: 16,
-    color: '#777777',
   },
 });
 

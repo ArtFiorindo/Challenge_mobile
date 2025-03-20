@@ -30,20 +30,6 @@ db.serialize(() => {
       descricao TEXT
     )
   `);
-
-  // Adicionar a coluna 'status' à tabela 'pacientes', se ela ainda não existir
-  db.run(`ALTER TABLE pacientes ADD COLUMN status TEXT DEFAULT 'pendente'`, (err) => {
-    if (err) {
-      // Se ocorrer um erro, pode ser porque a coluna já existe
-      if (err.message.includes("duplicate column name")) {
-        console.log("A coluna 'status' já existe.");
-      } else {
-        console.error('Erro ao adicionar a coluna: ' + err.message);
-      }
-    } else {
-      console.log("Coluna 'status' adicionada com sucesso.");
-    }
-  });
 });
 
 module.exports = db;
