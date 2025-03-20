@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, Alert } from 'react-native';
 import { useNavigation, useFocusEffect, RouteProp } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import axios from 'axios';
 import AdicionarPaciente from '../components/AdicionarPaciente';
 import ListaPacientes from '../components/ListaPacientes';
 
@@ -32,7 +33,7 @@ const CadastroPacienteScreen: React.FC<{ route: RouteProp<RouteParams, 'params'>
   // Verificar se há parâmetros de atualização de status
   useEffect(() => {
     if (route.params?.statusUpdated) {
-      // Forçar recarga quando o status for atualizado
+      // Recarregar a lista quando o status for atualizado
       setRecarregarPacientes(prev => !prev);
     }
   }, [route.params?.statusUpdated]);
@@ -50,11 +51,6 @@ const CadastroPacienteScreen: React.FC<{ route: RouteProp<RouteParams, 'params'>
     setEditandoPaciente(null);
     setRecarregarPacientes(prev => !prev);
     setMostrarForm(false);
-  };
-
-  const handleSetEditandoPaciente = (paciente: Paciente) => {
-    setEditandoPaciente(paciente);
-    setMostrarForm(true);
   };
 
   return (
@@ -105,13 +101,14 @@ const CadastroPacienteScreen: React.FC<{ route: RouteProp<RouteParams, 'params'>
               </View>
             </ScrollView>
           ) : (
-            <View style={styles.listContainer}>
-              <ListaPacientes 
-                setEditandoPaciente={handleSetEditandoPaciente}
-                recarregarPacientes={recarregarPacientes}
-                mostrarForm={setMostrarForm}
-              />
-            </View>
+            <ListaPacientes
+              setEditandoPaciente={(paciente) => {
+                setEditandoPaciente(paciente);
+                setMostrarForm(true);
+              }}
+              recarregarPacientes={recarregarPacientes}
+              setMostrarForm={setMostrarForm}
+            />
           )}
         </View>
 
@@ -224,12 +221,6 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 80,
     flexGrow: 1,
-  },
-  listContainer: {
-    flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 10,
-    paddingBottom: 80,
   },
   formCard: {
     backgroundColor: '#FFFFFF',

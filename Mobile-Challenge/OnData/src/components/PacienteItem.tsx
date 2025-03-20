@@ -26,8 +26,10 @@ const PacienteItem: React.FC<PacienteItemProps> = ({ paciente, onEdit, onDelete 
     navigation.navigate('DetalhesPacienteScreen', { paciente });
   };
 
-  // Função para confirmar exclusão
-  const confirmarExclusao = () => {
+  // Simplificado para evitar problemas com o evento
+  const handleDelete = (e: any) => {
+    e.stopPropagation(); // Previne que o evento de navegação seja acionado
+    console.log('Botão de exclusão pressionado para o paciente:', paciente.id);
     onDelete(paciente.id);
   };
 
@@ -87,15 +89,13 @@ const PacienteItem: React.FC<PacienteItemProps> = ({ paciente, onEdit, onDelete 
         </View>
         <View style={styles.pacienteInfo}>
           <Text style={styles.nome}>{paciente.nome}</Text>
-          {paciente.status && (
-            <View style={getStatusStyle(paciente.status).container}>
-              <Text style={getStatusStyle(paciente.status).text}>
-                {paciente.status}
-              </Text>
-            </View>
-          )}
+          <View style={getStatusStyle(paciente.status).container}>
+            <Text style={getStatusStyle(paciente.status).text}>
+              {paciente.status || 'pendente'}
+            </Text>
+          </View>
         </View>
-        <View style={styles.buttonsContainer}>
+        <View style={styles.actions}>
           <TouchableOpacity 
             style={styles.editButton} 
             onPress={(e) => {
@@ -103,19 +103,17 @@ const PacienteItem: React.FC<PacienteItemProps> = ({ paciente, onEdit, onDelete 
               onEdit(paciente);
             }}
           >
-            <Icon name="pencil" size={20} color="#FFFFFF" />
+            <Icon name="pencil" size={20} color="#8C82FC" />
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.deleteButton} 
-            onPress={(e) => {
-              e.stopPropagation();
-              confirmarExclusao();
-            }}
+            onPress={handleDelete}
           >
             <Icon name="delete" size={20} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
       </View>
+      
       <View style={styles.sinistroInfo}>
         <Text style={styles.sinistroLabel}>Sinistro:</Text>
         <Text style={styles.sinistroValue}>{paciente.sinistro}</Text>
@@ -161,23 +159,6 @@ const styles = StyleSheet.create({
     color: '#333333',
     marginBottom: 4,
   },
-  buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
-  editButton: {
-    backgroundColor: '#a288ff',
-    paddingVertical: 8,
-    paddingHorizontal: 8,
-    borderRadius: 8,
-    marginRight: 8,
-  },
-  deleteButton: {
-    backgroundColor: '#FF6347',
-    paddingVertical: 8,
-    paddingHorizontal: 8,
-    borderRadius: 8,
-  },
   sinistroInfo: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -192,6 +173,21 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#333333',
     fontWeight: '500',
+  },
+  actions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  editButton: {
+    padding: 8,
+    backgroundColor: '#F0F0FF',
+    borderRadius: 8,
+    marginRight: 8,
+  },
+  deleteButton: {
+    padding: 8,
+    backgroundColor: '#FF6347',
+    borderRadius: 8,
   },
 });
 
