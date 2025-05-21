@@ -76,6 +76,18 @@ Facilitar o processo de gerenciamento de informações de pacientes em ambientes
 
 ## Instalação
 
+## Download do APK
+
+### Link Direto para Download
+🔗 [Download APK - Expo Build](https://expo.dev/accounts/artfiorindo/projects/mobile-challenge/builds/79b5f2a6-6f3e-4f55-a018-24d41ac0cafb)
+
+> **Nota**: Este é o link oficial para download do APK do OnData através do Expo. Para instalar:
+> 1. Acesse o link
+> 2. Baixe o arquivo APK
+> 3. No seu dispositivo Android, permita a instalação de fontes desconhecidas
+> 4. Execute o arquivo APK baixado
+> 5. Siga as instruções de instalação do Android
+
 ### 1. Clone este repositório:
 ```bash
 git clone https://github.com/ArtFiorindo/Challenge_mobile.git
