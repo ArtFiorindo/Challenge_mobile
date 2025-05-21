@@ -1,227 +1,314 @@
 # OnData - Sistema de Cadastro de Pacientes
 
-OnData é uma aplicação móvel para cadastro de pacientes, desenvolvida em React Native. O aplicativo permite cadastrar, editar, excluir e visualizar os detalhes de pacientes de forma prática e eficiente. Este projeto faz uso de componentes customizados, validações de formulários, e navegação entre telas para criar uma experiência de usuário intuitiva.
-
----
-
 ## Sumário
 
 - [Equipe](#equipe)
+- [Descrição Geral](#descrição-geral-do-projeto)
 - [Pré-requisitos](#pré-requisitos)
 - [Instalação](#instalação)
-- [Configuração do Backend](#configuração-do-backend)
-- [Configuração do Frontend](#configuração-do-frontend)
+- [Configuração](#configuração)
 - [Uso](#uso)
 - [Estrutura do Projeto](#estrutura-do-projeto)
 - [Funcionalidades](#funcionalidades)
-- [Componentes](#componentes)
-- [Validações de Formulário](#validações-de-formulário)
-- [Tecnologias Usadas](#tecnologias-usadas)
+- [Tecnologias](#tecnologias-utilizadas)
+- [Documentação Detalhada](#documentação-detalhada)
 - [Atualizações Recentes](#atualizações-recentes)
-
----
-
 
 ## Equipe
 > Artur Lopes Fiorindo » 53481
 
-
 > Eduardo Felipe Nunes Função » 553362 
 
+> Jhoe Yoshio Kochi Hashimoto » 553831
 
-> Jhoe Yoshio Kochi Hashimoto 553831
+## Descrição Geral do Projeto
 
+O OnData é uma aplicação móvel desenvolvida em React Native dedicada ao gerenciamento e cadastro de pacientes. 
 
+### Objetivo
+Facilitar o processo de gerenciamento de informações de pacientes em ambientes clínicos e hospitalares, oferecendo uma interface intuitiva e funcional para profissionais da saúde.
 
----
+### Público-alvo
+- Profissionais da área da saúde
+- Administradores de clínicas e hospitais
+- Recepcionistas e assistentes administrativos
+
+### Funcionalidades Principais
+1. **Gestão de Pacientes**
+   - Cadastro completo de novos pacientes
+   - Edição de informações cadastrais
+   - Exclusão de registros
+   - Visualização detalhada dos dados
+
+2. **Sistema de Autenticação**
+   - Login seguro com email e senha
+   - Recuperação de senha
+   - Registro de novos usuários
+   - Autenticação via JWT
+
+3. **Gerenciamento de Dados**
+   - Validação automática de campos
+   - Formatação automática de CPF e datas
+   - Persistência de dados local
+   - Sincronização com backend
 
 ## Pré-requisitos
 
-Antes de começar, você vai precisar ter instalado em sua máquina as seguintes ferramentas:
+### Sistema Operacional
+- iOS 11.0 ou superior
+- Android 6.0 (API 23) ou superior
+- Windows/macOS/Linux (para desenvolvimento)
 
-- [Node.js](https://nodejs.org/)
-- [Expo CLI](https://docs.expo.dev/get-started/installation/)
-- [JSON Server](https://github.com/typicode/json-server) (para simular uma API REST)
-- Editor de código, como o [VSCode](https://code.visualstudio.com/)
+### Ferramentas Necessárias
+1. **Ambiente de Desenvolvimento**
+   - [Node.js](https://nodejs.org/) (versão 14.0 ou superior)
+   - npm ou yarn
+   - Git
 
----
+2. **Ferramentas de Desenvolvimento**
+   - [Expo CLI](https://docs.expo.dev/get-started/installation/)
+   - [JSON Server](https://github.com/typicode/json-server)
+   - Editor de código ([VSCode](https://code.visualstudio.com/) recomendado)
+
+3. **Para Dispositivos Móveis**
+   - Expo Go App instalado
+   - Emulador Android/iOS (opcional)
 
 ## Instalação
 
 ### 1. Clone este repositório:
-
 ```bash
-git clone https://github.com/seu-usuario/OnData.git
-cd OnData
+git clone https://github.com/ArtFiorindo/Challenge_mobile.git
+cd Challenge_mobile
 ```
 
-### 2. Instale as dependências do projeto:
-
+### 2. Instalação de Dependências
 ```bash
-yarn add install
+yarn install
+# ou
+npm install
 ```
 
-### 3. Instale o JSON Server globalmente (caso não tenha):
+## Configuração
 
+### Backend (Desenvolvimento)
 ```bash
 npm install -g json-server
-```
-
----
-
-## Configuração do Backend
-
-Para simular o backend, utilizaremos o JSON Server.
-
-1. Execute o JSON Server para iniciar a API de exemplo:
-
-```bash
 json-server --watch db.json --port 3000
-```
- ou
-```bash
+# ou
 node server.js
 ```
 
 A API estará disponível em `http://localhost:3000`.
 
----
-
-## Configuração do Frontend
-
-### Configuração do Expo
-
-Certifique-se de que o Expo está instalado e configurado corretamente.
-
-### Executando o Projeto
-
-1. Com o JSON Server rodando, inicie o aplicativo com o Expo:
-
+### Frontend
+1. Inicie o aplicativo:
 ```bash
 yarn start
 ```
 
-2 Aperte W dentro do terminal para rodar a aplicação no seu navegador WEB ou no seu emulador
+2. Opções de execução:
+- Escaneie o QR Code com o Expo Go (Android/iOS)
+- Pressione 'w' para abrir no navegador
+- Pressione 'a' para abrir no emulador Android
+- Pressione 'i' para abrir no emulador iOS
 
-
----
-
-## Uso
-
-1. **Login**: Acesse o sistema utilizando seu email e senha.
-2. **Cadastro de Pacientes**: Preencha o formulário com os dados do paciente e clique em "Adicionar Paciente".
-3. **Editar Paciente**: Clique no botão "Editar" ao lado do nome do paciente, faça as alterações e salve.
-4. **Excluir Paciente**: Clique no botão "Excluir" para remover o paciente da lista.
-5. **Detalhes do Paciente**: Clique no nome do paciente para visualizar seus detalhes.
-
----
-
-# Estrutura do Projeto 
+## Estrutura do Projeto
 
 ```plaintext
 OnData/
-├── assets/                         # Imagens e ícones
-├── src/                            # Código-fonte principal do aplicativo
+├── assets/                         # Recursos estáticos
+├── src/
 │   ├── components/                 # Componentes reutilizáveis
-│   │   ├── AdicionarPaciente.tsx   # Formulário de cadastro e edição de pacientes
-│   │   ├── ListaPacientes.tsx      # Lista de pacientes cadastrados
-│   │   ├── Footer.tsx              # Componente de rodapé
-│   │   ├── Header.tsx              # Componente de cabeçalho
-│   │   ├── Layout.tsx              # Layout base para a aplicação, estrutura geral da tela
-│   │   └── PacienteItem.tsx        # Item de paciente individual na lista
-│   ├── hooks/                      # Hooks customizados
-│   │   └── EstadoGlobal.tsx        # Hook de estado global para gerenciar dados entre componentes
-│   ├── navigation/                 # Configurações de navegação
-│   │   ├── AppNavigator.tsx        # Configuração de navegação do aplicativo
-│   │   └── types.ts                # Tipos utilizados na navegação
-│   ├── screens/                    # Telas principais da aplicação
-│   │   ├── CadastroPacienteScreen.tsx   # Tela de cadastro de pacientes
-│   │   ├── ConfiguracaoScreen.tsx       # Tela de configurações do aplicativo
-│   │   ├── DetalhesPacienteScreen.tsx   # Tela de detalhes do paciente
-│   │   ├── LoginScreen.tsx              # Tela de login do usuário
-│   │   ├── HomeScreen.tsx               # Tela inicial do aplicativo
-│   │   ├── RegisterScreen.tsx           # Tela de registro de novos usuários
-│   │   ├── PerfilUsuarioScreen.tsx      # Tela para editar e configura informacões como email e senha
-│   │   └── ResetPasswordScreen.tsx      # Tela de redefinição de senha
-├── .gitignore                      # Arquivo para ignorar arquivos/pastas no Git
-├── App.tsx                         # Arquivo principal do aplicativo, ponto de entrada
-└── README.md                       # Documentação do projeto
+│   │   ├── AdicionarPaciente.tsx   # Formulário de cadastro
+│   │   ├── ListaPacientes.tsx      # Lista de pacientes
+│   │   ├── Footer.tsx              # Navegação inferior
+│   │   ├── Header.tsx              # Cabeçalho
+│   │   ├── Layout.tsx              # Layout base
+│   │   └── PacienteItem.tsx        # Item de paciente
+│   ├── hooks/                      # Hooks personalizados
+│   │   └── EstadoGlobal.tsx        # Estado global
+│   ├── navigation/                 # Configuração de rotas
+│   │   ├── AppNavigator.tsx
+│   │   └── types.ts
+│   ├── screens/                    # Telas da aplicação
+│   │   ├── CadastroPacienteScreen.tsx
+│   │   ├── ConfiguracaoScreen.tsx
+│   │   ├── DetalhesPacienteScreen.tsx
+│   │   ├── LoginScreen.tsx
+│   │   ├── HomeScreen.tsx
+│   │   ├── RegisterScreen.tsx
+│   │   ├── PerfilUsuarioScreen.tsx
+│   │   └── ResetPasswordScreen.tsx
+├── App.tsx                         # Ponto de entrada
+└── README.md                       # Documentação
 ```
 
+## Fluxo do Aplicativo
 
+```mermaid
+graph TD
+    A[Início] --> B{Usuário Autenticado?}
+    B -->|Não| C[Tela de Login]
+    B -->|Sim| D[Tela Principal]
+    
+    C --> E[Login]
+    C --> F[Registro]
+    C --> G[Recuperar Senha]
+    
+    E --> D
+    F --> C
+    G --> C
+    
+    D --> H[Lista de Pacientes]
+    D --> I[Adicionar Paciente]
+    D --> J[Configurações]
+    
+    H --> K[Detalhes do Paciente]
+    K --> L[Editar Paciente]
+    K --> M[Excluir Paciente]
+    
+    I --> N[Formulário de Cadastro]
+    N --> O{Validação}
+    O -->|Sucesso| H
+    O -->|Erro| N
+```
 
----
+## Tecnologias Utilizadas
 
-## Funcionalidades
+### React Native
+O projeto utiliza React Native como framework principal, aproveitando seus benefícios:
+- Desenvolvimento cross-platform
+- Alta performance
+- Componentes reutilizáveis
+- Hot Reloading para desenvolvimento
 
-- **Autenticação de Usuários**: Sistema de login e cadastro usando email e senha.
-- **Redefinição de Senha**: Possibilidade de redefinir a senha através do email cadastrado.
-- **Cadastrar Pacientes**: Adicione novos pacientes preenchendo os campos obrigatórios do formulário.
-- **Editar Pacientes**: Edite os dados dos pacientes previamente cadastrados.
-- **Excluir Pacientes**: Remova pacientes da lista.
-- **Visualizar Detalhes**: Visualize informações detalhadas sobre o paciente.
-- **Validação de Formulário**: O formulário impede o envio se todos os campos obrigatórios não estiverem preenchidos.
-- **Formatação Automática**: O CPF e a Data de Nascimento são formatados automaticamente durante a digitação.
-- **Navegação via Footer**: Acesso rápido às principais telas através do rodapé navegável.
+### Principais Bibliotecas
+1. **UI/UX**
+   - [NativeBase](https://nativebase.io/) (componentes)
+   - [React Native Vector Icons](https://github.com/oblador/react-native-vector-icons) (ícones)
+   - [React Navigation](https://reactnavigation.org/) (navegação)
 
----
+2. **Dados e Estado**
+   - [AsyncStorage](https://github.com/react-native-async-storage/async-storage) (persistência local)
+   - Context API (gerenciamento de estado)
 
-## Componentes
+3. **Segurança**
+   - [JWT](https://github.com/auth0/node-jsonwebtoken) (autenticação)
+   - [Bcrypt](https://github.com/kelektiv/node.bcrypt.js) (criptografia)
 
-- **LoginScreen**: Tela de autenticação de usuários usando email e senha.
-- **RegisterScreen**: Cadastro de novos usuários no sistema.
-- **ResetPasswordScreen**: Redefinição de senha através do email cadastrado.
-- **AdicionarPaciente**: Componente responsável pelo formulário de cadastro e edição.
-- **ListaPacientes**: Lista de todos os pacientes cadastrados.
-- **PacienteItem**: Exibe informações resumidas do paciente e permite editar ou excluir.
-- **DetalhesPacienteScreen**: Tela para visualização detalhada dos dados de um paciente.
-- **Footer**: Componente de navegação inferior presente em todas as telas.
+## Funcionalidades Detalhadas
 
----
+### Autenticação de Usuários
+- Login com email e senha
+- Recuperação de senha via email
+- Registro de novos usuários
+- Persistência de sessão
+- Logout seguro
 
-## Validações de Formulário
+### Gestão de Pacientes
+1. **Cadastro**
+   - Informações pessoais
+   - Dados de contato
+   - Histórico médico
+   - Documentos
 
-- **Validação de Email**: O sistema verifica se o formato do email é válido ao fazer login ou cadastro.
-- **Validação de Senha**: Verifica se as senhas coincidem durante o cadastro ou redefinição.
-- **Campos obrigatórios**: O modal exibe uma mensagem de erro se algum campo obrigatório estiver vazio.
-- **Formatação de CPF**: A formatação do CPF adiciona automaticamente pontos e traço, permitindo apenas 11 dígitos.
-- **Formatação de Data de Nascimento**: A formatação da data de nascimento adiciona automaticamente as barras (`/`), permitindo apenas 8 dígitos.
+2. **Edição**
+   - Atualização de dados
+   - Histórico de alterações
+   - Validação de campos
 
----
+3. **Visualização**
+   - Lista de pacientes
+   - Detalhes individuais
+   - Filtros e busca
+   - Ordenação
 
-
-## Tecnologias Usadas
-
-- [React Native](https://reactnative.dev/)
-- [Expo](https://expo.dev/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [JSON Server](https://github.com/typicode/json-server)
-- [NativeBase](https://nativebase.io/)
-- [React Navigation](https://reactnavigation.org/)
-- [React Native Vector Icons](https://github.com/oblador/react-native-vector-icons)
-- [AsyncStorage](https://github.com/react-native-async-storage/async-storage)
-- [Bcrypt](https://github.com/kelektiv/node.bcrypt.js)
-- [JWT](https://github.com/auth0/node-jsonwebtoken)
-
----
+### Validações de Formulário
+- **Validação de Email**: Verificação de formato válido
+- **Validação de Senha**: Requisitos mínimos de segurança
+- **Campos obrigatórios**: Indicação visual e mensagens de erro
+- **Formatação automática**:
+  - CPF: XXX.XXX.XXX-XX
+  - Data: DD/MM/YYYY
+  - Telefone: (XX) XXXXX-XXXX
 
 ## Atualizações Recentes
 
 ### Sistema de Autenticação (Março 2025)
+- **Login baseado em Email**: Migração para autenticação via email
+- **Token JWT**: Implementação de tokens para segurança
+- **AsyncStorage**: Persistência local de sessão
+- **Criptografia**: Implementação de bcrypt
+- **Login Social**: Preparação para Google e Apple Sign-In
 
-- **Login baseado em Email**: Implementação de autenticação usando email e senha em vez de nome de usuário.
-- **Redefinição de Senha**: Adição de funcionalidade para redefinir senha quando esquecida.
-- **Token JWT**: Implementação de autenticação via tokens JWT para maior segurança.
-- **AsyncStorage**: Utilização de AsyncStorage para persistir a sessão do usuário.
-- **Criptografia de Senha**: Uso de bcrypt para armazenar senhas de forma segura no banco de dados.
-- **Login Social**: Adição de opções para login via Google e Apple (implementação pendente).
+### Modernização da Interface (Maio 2025)
+- **Design System**: Implementação de sistema de design consistente
+- **Componentes**: Biblioteca de componentes reutilizáveis
+- **Acessibilidade**: Melhorias para usuários com necessidades especiais
+- **Responsividade**: Adaptação para diferentes tamanhos de tela
+- **Temas**: Suporte a modo claro e escuro
 
-### Modernização da Interface (Março 2025)
+### Melhorias de Performance (Maio 2025)
+- **Lazy Loading**: Carregamento otimizado de componentes
+- **Cache**: Implementação de sistema de cache
+- **Otimização de Imagens**: Compressão e carregamento progressivo
+- **Estado**: Gerenciamento eficiente com Context API
 
-- **Design com Cards**: Implementação de cards mais definidos e arredondados para melhor visualização dos conteúdos.
-- **Footer Navegável**: Adição de um rodapé de navegação consistente em todas as telas para facilitar o acesso às principais funcionalidades.
-- **Elementos Visuais**: Inclusão de elementos decorativos como círculos de fundo para criar uma experiência visual mais agradável.
-- **Ícones**: Incorporação de ícones intuitivos usando a biblioteca React Native Vector Icons para melhorar a usabilidade.
-- **Paleta de Cores**: Manutenção da identidade visual baseada nas cores originais (#8C82FC, #E2E0FF) com ajustes de contraste para melhor legibilidade.
-- **Cards Interativos**: Melhoria na interatividade dos cards com efeitos visuais de feedback ao toque.
-- **Formulários Modernizados**: Reformulação dos formulários para uma experiência mais intuitiva e agradável.
+## Documentação da API
+
+### Endpoints Principais
+```typescript
+// Autenticação
+POST   /api/auth/login
+POST   /api/auth/register
+POST   /api/auth/reset-password
+
+// Pacientes
+GET    /api/patients
+POST   /api/patients
+GET    /api/patients/:id
+PUT    /api/patients/:id
+DELETE /api/patients/:id
+```
+
+## Próximos Passos
+
+### Versão 2.0 (Planejada para Julho 2025)
+1. **Funcionalidades**
+   - Agendamento de consultas
+   - Histórico médico completo
+   - Integração com prontuário eletrônico
+   - Notificações push
+
+2. **Melhorias Técnicas**
+   - Migração para React Native CLI
+   - Implementação de testes automatizados
+   - CI/CD pipeline
+   - Monitoramento de erros
+
+3. **Interface**
+   - Redesign completo da UI
+   - Novos componentes animados
+   - Melhorias de UX baseadas em feedback
+
+## Suporte
+
+### Contato
+- **Email**: suporte@ondata.com
+- **GitHub**: [@ArtFiorindo](https://github.com/ArtFiorindo)
+- **Issues**: [GitHub Issues](https://github.com/ArtFiorindo/Challenge_mobile/issues)
+
+### Contribuição
+1. Faça um Fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+---
+
+## Licença
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+---
